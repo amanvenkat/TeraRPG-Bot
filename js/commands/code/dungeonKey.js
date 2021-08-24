@@ -1,3 +1,4 @@
+import queryData from "../../helper/query.js";
 import cekCode from "./cekCode.js";
 import embed from "./embed.js";
 

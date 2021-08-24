@@ -1,6 +1,5 @@
-import addExpGold from "../../helper/addExp.js";
+
 import queryData from "../../helper/query.js";
-import { limitedTimeUse } from "../../helper/variable.js";
 import cekMaxGold from "../../utils/cekMaxGold.js";
 import embed from "./embed.js";
 

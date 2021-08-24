@@ -12,7 +12,7 @@ async function code(message, args) {
     let code = args[0];
     let cekCodeX = await cekCode(message.author.id, code)
     if(cekCodeX){ ``
-        message.channel.send(`${emojiCharacter.noEntry} | You have already claimed this code!!!`);
+        return message.channel.send(`${emojiCharacter.noEntry} | You have already claimed this code!!!`);
     }
     
     if (code === 'lucky') {
