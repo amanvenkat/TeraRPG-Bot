@@ -9,7 +9,7 @@ export default async function botDetection(message, validate) {
     date = formatDate(date);
 
     // let hit = await SELECT(``)
-    let chances = randomNumber(1, 700)
+    let chances = randomNumber(1, 500)
     if (chances == 2 || validate) {
         let captcha = await queryData(`SELECT * FROM captcha WHERE link<>''`);
         if (captcha.length > 0) {
