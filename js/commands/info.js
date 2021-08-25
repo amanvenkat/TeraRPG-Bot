@@ -88,7 +88,7 @@ function info(message, args, commandBody) {
         name = en.info.bait.name;
         info = en.info.bait.info;
         obtain = en.info.bait.obtain;
-    }  else if (itemName === 'marketplace') {
+    } else if (itemName === 'marketplace') {
         name = en.info.marketplace.name;
         info = en.info.marketplace.info;
         obtain = en.info.marketplace.obtain;
@@ -96,6 +96,10 @@ function info(message, args, commandBody) {
         name = en.info.armory.name;
         info = en.info.armory.info;
         obtain = en.info.armory.obtain;
+    } else if (itemName === 'dungeon key') {
+        name = en.info.dungeonKey.name;
+        info = en.info.dungeonKey.info;
+        obtain = en.info.dungeonKey.obtain;
     } else {
         return message.channel.send(en.info.infoNotFound);
     }

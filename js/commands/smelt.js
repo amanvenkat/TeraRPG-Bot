@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 import queryData from "../helper/query.js";
-import { emojiName, variable } from "../helper/variable.js";
+import { emojiName, materialList, variable } from "../helper/variable.js";
 import emojiCharacter from "../utils/emojiCharacter.js";
 import questProgress from "../utils/questProgress.js";
 import symbol from "../utils/symbol.js";
@@ -16,17 +16,17 @@ async function smelt(message, args) {
         if (args[1] === 'bar') {
             let qty = !isNaN(args[2]) ? parseInt(args[2]) : 1;
             if (args[0] === 'copper') {
-                processSmelt(message, variable.copperBarId, variable.copperOreId, qty, emojiName.copperBar);
+                processSmelt(message, variable.copperBarId, variable.copperOreId, materialList.copperBar[0].quantity, qty, emojiName.copperBar);
             } else if (args[0] === 'iron') {
-                processSmelt(message, variable.ironBarId, variable.ironOreId, qty, emojiName.ironBar);
+                processSmelt(message, variable.ironBarId, variable.ironOreId, materialList.ironBar[0].quantity, qty, emojiName.ironBar);
             } else if (args[0] === 'silver') {
-                processSmelt(message, variable.silverBarId, variable.silverOreId, qty, emojiName.silverBar);
+                processSmelt(message, variable.silverBarId, variable.silverOreId, materialList.silverBar[0].quantity, qty, emojiName.silverBar);
             } else if (args[0] === 'tungsten') {
-                processSmelt(message, variable.tungstenBarId, variable.tungstenOreId, qty, emojiName.tungstenBar);
+                processSmelt(message, variable.tungstenBarId, variable.tungstenOreId, materialList.tungstenBar[0].quantity, qty, emojiName.tungstenBar);
             } else if (args[0] === 'gold') {
-                processSmelt(message, variable.goldBarId, variable.goldOreId, qty, emojiName.goldBar);
+                processSmelt(message, variable.goldBarId, variable.goldOreId, materialList.goldBar[0].quantity, qty, emojiName.goldBar);
             } else if (args[0] === 'platinum') {
-                processSmelt(message, variable.platinumBarId, variable.platinumOreId, qty, emojiName.platinumBar);
+                processSmelt(message, variable.platinumBarId, variable.platinumOreId, materialList.platinumBar[0].quantity, qty, emojiName.platinumBar);
             }
         } else {
             message.channel.send('What are you trying to smelt? Correct use is \`tera smelt [item bar] [amount]\`\n e.g. \`tera smelt iron bar 10\`, smelting will give back 80% of the ore') 
@@ -36,7 +36,7 @@ async function smelt(message, args) {
     }
 }
 
-async function processSmelt(message, itemID, itemIDTo, quantity, emojiNames) {
+async function processSmelt(message, itemID, itemIDTo, oreQty, quantity, emojiNames) {
     let furnaceExist = await queryData(`SELECT item_id_furnace FROM tools WHERE player_id="${message.author.id}" AND item_id_furnace="${variable.furnaceId}" LIMIT 1`);
     furnaceExist = furnaceExist.length > 0 ? 1 : 0;
     if (!furnaceExist) {
@@ -46,7 +46,7 @@ async function processSmelt(message, itemID, itemIDTo, quantity, emojiNames) {
                     WHERE player_id="${message.author.id}" AND item_id="${itemID}" AND quantity>=${quantity} LIMIT 1`);
     itemExist = itemExist.length > 0 ? itemExist[0] : undefined;
     if (itemExist) {
-        let qtyAfterSmelt = quantity * 10 * 80 / 100;
+        let qtyAfterSmelt = Math.floor((quantity * oreQty) * (80 / 100));
         let item = await queryData(`SELECT emoji, name FROM item WHERE id="${itemIDTo}" LIMIT 1`);
         let embed = new Discord.MessageEmbed({
             type: "rich",

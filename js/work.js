@@ -49,7 +49,7 @@ async function work(message, workingCommand, zone_id) {
                 }
                 let itemDrop = randomizeChance(itemDropList, discoveredZone);
                 levelPickaxe = levelPickaxe.length > 0 ?  levelPickaxe[0] : [];
-                let maxItemBasedOnTier = Math.floor((10 + (levelPickaxe.pickaxe_level * 0.3)) / itemDrop.tier);
+                let maxItemBasedOnTier = Math.floor((5 + (levelPickaxe.pickaxe_level * 0.3)) / itemDrop.tier);
                 let maxGainingItem = itemDrop.id === 1 ? 3 * levelPickaxe.pickaxe_level : 3;
                 let gainingItem = randomNumber(1, maxItemBasedOnTier);// get random item gaining
                 let expGot = parseInt(itemDrop.exp) * gainingItem;

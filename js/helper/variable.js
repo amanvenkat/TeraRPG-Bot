@@ -279,22 +279,28 @@ var  materialList = {
         ],
         // BAR
         copperBar: [
-                { id: 1, name: 'copper ore', quantity: 3 },
+                { id: 1, name: 'copper ore', quantity: 6 },
+                { id: variable.woodId, name: 'wood', quantity: 3 },
         ],
         ironBar: [
-                { id: 3, name: 'iron ore', quantity: 3 },
+                { id: 3, name: 'iron ore', quantity: 6 },
+                { id: variable.woodId, name: 'wood', quantity: 7 },
         ],
         silverBar: [
-                { id: 5, name: 'silver ore', quantity: 4 },      
+                { id: 5, name: 'silver ore', quantity: 8 },      
+                { id: variable.woodId, name: 'wood', quantity: 10 },
         ],
         tungstenBar: [
-                { id: 6, name: 'tungsten ore', quantity: 4 },      
+                { id: 6, name: 'tungsten ore', quantity: 8 },      
+                { id: variable.woodId, name: 'wood', quantity: 15 },
         ],
         goldBar: [
-                { id: 7, name: 'gold ore', quantity: 4 },      
+                { id: 7, name: 'gold ore', quantity: 9 },      
+                { id: variable.woodId, name: 'wood', quantity: 20 },
         ],
         platinumBar: [
-                { id: 8, name: 'platinum ore', quantity: 4 },       
+                { id: 8, name: 'platinum ore', quantity: 9 },     
+                { id: variable.woodId, name: 'wood', quantity: 25 },  
         ],
 }
 var materialUpgradeTool= {

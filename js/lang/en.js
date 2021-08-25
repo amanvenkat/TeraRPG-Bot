@@ -118,6 +118,11 @@ export default {
             name: 'Armory',
             info: `Store your equipment here, you can store a maximum of 5 items\nfor each equipment type.\n**Usage**\n**• tera equip [id/name]\n\`equip an item from your armory\`\n• tera unequip [equip type]\n**equip type: \`weapon\`,\`helmet\`,\`shirt\`,\`pants\`\n**• tera sell armory [id]\n\`sell an item from armory\`**`,
             obtain: 'Anywhere',
+        },
+        dungeonKey: {
+            name: '<:dungeon_key:877776627432554506> Dungeon Key',
+            info: `Used to enter dungeon zones`,
+            obtain: 'Explore',
         }
     },
     pirates: {

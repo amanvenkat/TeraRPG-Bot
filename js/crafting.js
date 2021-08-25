@@ -358,12 +358,12 @@ async function crafting(message, commandBody, stat) {
                         inline: false
                     },
                     {
-                        value: `<:Copper_Bar:803907956478836817>__copper bar__ : ${materialList.copperBar[0].quantity} <:copper_ore:835767578021462078> ➜ <:Furnace:804145327513796688>` +
-                            `\n<:Iron_Bar:803907956528906241>__iron bar__ : ${materialList.ironBar[0].quantity} <:iron_ore:835768116927135744> ➜ <:Furnace:804145327513796688>` +
-                            `\n<:Silver_Bar:803907956663910410>__silver bar__ : ${materialList.silverBar[0].quantity} <:silver_ore:835764438991765524> ➜ <:Furnace:804145327513796688>` +
-                            `\n<:Tungsten_Bar:803907956252344331>__tungsten bar__ : ${materialList.tungstenBar[0].quantity} <:tungsten_ore:835768117132001301> ➜ <:Furnace:804145327513796688>` +
-                            `\n<:Gold_Bar:803907956424441856>__gold bar bar__ : ${materialList.goldBar[0].quantity} <:gold_ore:835767578621247488> ➜ <:Furnace:804145327513796688>` +
-                            `\n<:Platinum_Bar:803907956327317524>__platinum bar__ : ${materialList.platinumBar[0].quantity} <:platinum_ore:835768116889124905> ➜ <:Furnace:804145327513796688>`,
+                        value: `<:Copper_Bar:803907956478836817>__copper bar__ : ${materialList.copperBar[0].quantity} <:copper_ore:835767578021462078> + ${materialList.copperBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
+                            `\n<:Iron_Bar:803907956528906241>__iron bar__ : ${materialList.ironBar[0].quantity} <:iron_ore:835768116927135744> + ${materialList.ironBar[1].quantity} <:Wood:804704694420766721>➜ <:Furnace:804145327513796688>` +
+                            `\n<:Silver_Bar:803907956663910410>__silver bar__ : ${materialList.silverBar[0].quantity} <:silver_ore:835764438991765524> + ${materialList.silverBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
+                            `\n<:Tungsten_Bar:803907956252344331>__tungsten bar__ : ${materialList.tungstenBar[0].quantity} <:tungsten_ore:835768117132001301> + ${materialList.tungstenBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
+                            `\n<:Gold_Bar:803907956424441856>__gold bar bar__ : ${materialList.goldBar[0].quantity} <:gold_ore:835767578621247488> + ${materialList.goldBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
+                            `\n<:Platinum_Bar:803907956327317524>__platinum bar__ : ${materialList.platinumBar[0].quantity} <:platinum_ore:835768116889124905> + ${materialList.platinumBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>`,
                         name: "Bars",
                         inline: false
                     }],
@@ -381,33 +381,48 @@ async function crafting(message, commandBody, stat) {
 
 async function craftBar(message,playerId,username, itemIdCrafted, materialList, emoji,  args1, args2, craftQty) {
     let existWorkbench = await queryData(`SELECT item_id_furnace FROM tools WHERE player_id="${playerId}" AND item_id_furnace="${furnaceId}" LIMIT 1`);
-        let qty = 1;
-        if (parseInt(craftQty) > 0) {
-            qty = parseInt(craftQty);
+    let qty = 1;
+    if (parseInt(craftQty) > 0) {
+        qty = parseInt(craftQty);
+    }
+    // let materialsReq = qty * materialList[0].quantity;
+    let exist = 1;
+    // else {
+    let existMaterials = [];
+    // let exist = new Promise((resolve, reject) => {
+    for (const element of materialList) {
+        existMaterials = await queryData(`SELECT item_id FROM backpack WHERE player_id="${playerId}" AND (item_id=${element.id} AND quantity>=${element.quantity * qty}) LIMIT 1`);
+        if (!existMaterials.length > 0) {
+            exist = 0;
         }
-        let materialsReq = qty * materialList[0].quantity;
-        if (existWorkbench.length > 0) {
-            let existMaterials = await queryData(`SELECT item_id, quantity FROM backpack WHERE player_id="${playerId}" AND item_id="${materialList[0].id}" AND quantity>="${materialsReq}"`);
-            if (existMaterials.length > 0) {
-                if (craftQty === 'all') {
-                    qty = Math.floor(existMaterials[0].quantity / materialList[0].quantity);
-                    materialsReq = qty * materialList[0].quantity;
-                }
-                let amount = await queryData(`CALL insert_item_backpack_procedure("${playerId}", "${itemIdCrafted}", "${qty}")`);
-                amount = amount.length > 0 ? amount[0][0]['@qty'] : 0;
-                queryData(`UPDATE backpack SET quantity=quantity-${materialsReq} WHERE player_id="${playerId}" AND item_id="${materialList[0].id}"`)
-                message.channel.send(`<:Furnace:804145327513796688> | **${username}** has successfully crafted x${qty} ${emoji} **${args1} ${args2}**, \nYou now have x${amount} ${emoji} **${args1} ${args2}** in your backpack\nuse\`smelt\` to smelting item bar`)
+    }
 
-                // QUEST PROGRESS ITEM COPPER BAR
-                if (itemIdCrafted == 22) {
-                    questProgress(message.author.id, 7, qty);
-                }
-            } else {
-                message.reply(`:no_entry_sign: | you don't have enough materials to craft x${qty} ${emoji} **${args1} ${args2}**,\ngo work and get the materials it need, you can also check crafter material receipts with \`tera craft\`!`)
+    if (existWorkbench.length > 0) {            
+        if (exist) {
+            if (craftQty === 'all') {
+                qty = Math.floor(existMaterials[0].quantity / materialList[0].quantity);
+                materialsReq = qty * materialList[0].quantity;
+            }
+
+            let amount = await queryData(`CALL insert_item_backpack_procedure("${playerId}", "${itemIdCrafted}", "${qty}")`);
+            amount = amount.length > 0 ? amount[0][0]['@qty'] : 0;
+
+            for (const element of materialList) {
+                queryData(`UPDATE backpack SET quantity=quantity-${element.quantity} WHERE player_id="${playerId}" AND item_id="${element.id}"`)
+            }
+            
+            message.channel.send(`<:Furnace:804145327513796688> | **${username}** has successfully crafted x${qty} ${emoji} **${args1} ${args2}**, \nYou now have x${amount} ${emoji} **${args1} ${args2}** in your backpack\nuse\`smelt\` to smelting item bar`)
+
+            // QUEST PROGRESS ITEM COPPER BAR
+            if (itemIdCrafted == 22) {
+                questProgress(message.author.id, 7, qty);
             }
         } else {
-            message.reply(`:no_entry_sign: | you need <:Furnace:804145327513796688> **furnace** to craft this item!`)
+            message.reply(`:no_entry_sign: | you don't have enough materials to craft x${qty} ${emoji} **${args1} ${args2}**,\ngo work and get the materials it need, you can also check crafter material receipts with \`tera craft\`!`)
         }
+    } else {
+        message.reply(`:no_entry_sign: | you need <:Furnace:804145327513796688> **furnace** to craft this item!`)
+    }
 }
 
 async function craftWeapon(message, playerId, username, itemName, args1, args2, item) {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "run": "node index.js > tera.log"
+    "run": "node index.js > /root/discord/teraRPG/log/tera$(date +%Y%m%d%I%M).log"
   },
   "keywords": [
     "rpg",

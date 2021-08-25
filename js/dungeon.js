@@ -93,7 +93,7 @@ async function dungeon(message, stat) {
         let cekDungeonKey1 = await queryData(`SELECT item_id FROM backpack WHERE item_id="348" AND quantity="${keyNeeded}" AND player_id="${player1.id}" LIMIT 1`);
         cekDungeonKey1 = cekDungeonKey1.length > 0 ? cekDungeonKey1[0] : undefined;
         if (!cekDungeonKey1) {
-            message.channel.send(`<:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon, that you can acquire through explore`);
+            message.channel.send(`<:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon, you can acquire it through explore`);
             return;
         }
         let cekDungeonKey2 = await queryData(`SELECT item_id FROM backpack WHERE item_id="348" AND quantity="${keyNeeded}" AND player_id="${player2.id}" LIMIT 1`);
@@ -280,7 +280,7 @@ ${generateIcon(player2Stat.hp, maxPlayer2Stat.hp, true)}  HP ${player2Stat.hp}/$
             color: 10115509,
             fields: [{
                 name: 'Victory',
-                value: `All party member has been unlock the next area`,
+                value: `All party members now unlocked the next area`,
                 inline: false,
             },{
                 name: 'Rewards',
