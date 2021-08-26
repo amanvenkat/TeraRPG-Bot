@@ -125,6 +125,7 @@ async function marketplace(message, args, stat) {
             timestamp: new Date()
         });
 
+        // if()
         message.channel.send(embed)
             .then(() => {
                 // let filter = false;
@@ -161,7 +162,7 @@ async function marketplace(message, args, stat) {
                     } else if (message.content.toLowerCase() == 'mb' && page > 1) {
                         page -= 1;
                         marketplace(page)
-                    } else {
+                    } else if (message.content.toLowerCase() == 'mn' || message.content.toLowerCase() == 'mb'){
                         return message.channel.send(`${emojiCharacter.noEntry} | Page out of range, please refresh the marketplace`);
                     }
                     // deactiveCommand(message.author.id)
