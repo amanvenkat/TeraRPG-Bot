@@ -44,9 +44,7 @@ async function duel(message,stat) {
             // CEK USER JAILED
             let isJailed = await queryData(`SELECT * FROM jail WHERE player_id=${player2.id} AND released=0 LIMIT 1`);
             isJailed = isJailed.length > 0 ? isJailed[0] : false;
-            if (isJailed) {
-                return message.reply(`you cannot team up with jailed player`);
-            }
+            if (isJailed) { return message.reply(`you cannot team up with jailed player`); }
             
             
             let p1MaxHp = getMaxHP(stat.basic_hp, stat.level);
@@ -81,12 +79,12 @@ async function duel(message,stat) {
                                 } else {
                                     message2.delete();
                                     // Load player data from DB
-                                    let player1Buff = await getPlayerBuffs(player1);
-                                    let player2Buff = await getPlayerBuffs(player2);
+                                    let player1Buff = await getPlayerBuffs(player1.id);
+                                    let player2Buff = await getPlayerBuffs(player2.id);
 
                                     let playerData = await getPlayerData(player1, player2);
                                     let player1Stat = {
-                                        id: player1,
+                                        id: player1.id,
                                         level: playerData[0].level,
                                         attack: getAttack(playerData[0].basic_attack, playerData[0].attack, playerData[0].level, playerData[0].weapon_modifier, player1Buff.buff_attack),
                                         def : getDefense(playerData[0].basic_def, playerData[0].level, playerData[0].helmetDef, playerData[0].shirtDef, playerData[0].pantsDef, playerData[0].bonus_armor_set, playerData[0].helmet_modifier, playerData[0].shirt_modifier, playerData[0].pants_modifier, player1Buff.buff_def),
@@ -99,7 +97,7 @@ async function duel(message,stat) {
                                     }
 
                                     let player2Stat = {
-                                        id: player2,
+                                        id: player2.id,
                                         level: playerData[1].level,
                                         attack: getAttack(playerData[1].basic_attack, playerData[1].attack,  playerData[1].level, playerData[1].weapon_modifier, player2Buff.buff_attack),
                                         def : getDefense(playerData[1].basic_def, playerData[1].level, playerData[1].helmetDef, playerData[1].shirtDef, playerData[1].pantsDef, playerData[1].bonus_armor_set, playerData[1].helmet_modifier, playerData[1].shirt_modifier, playerData[1].pants_modifier, player2Buff.buff_def),
@@ -428,16 +426,17 @@ async function duel(message,stat) {
                                     repeat();
                                 }
                             })
-                            .catch(collected => {
-                                message2.delete();
-                                message2.channel.send('Timeout, cancelled')
-                                deactiveCommand([message.author.id, player2.id])
-                            });
+                            // .catch(collected => {
+                            //     message2.delete();
+                            //     message2.channel.send('Timeout, cancelled')
+                            //     deactiveCommand([message.author.id, player2.id])
+                            // });
                 
-                    }).catch(function () {
-                        deactiveCommand([message.author.id, player2.id])
-                        //Something
-            })
+                    })
+            //         .catch(function () {
+            //             deactiveCommand([message.author.id, player2.id])
+            //             //Something
+            // })
         }
     } else {
         message.channel.send(`Correct use \`tera duel @user`);
