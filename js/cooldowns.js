@@ -38,7 +38,7 @@ async function cooldowns(message, command, args1) {
     let quest = (currentTime - playerInfo.quest) > cooldown.quest - (cooldown.quest * cooldownReduce)? 0 : cooldown.quest - (cooldown.quest * cooldownReduce)- (currentTime - playerInfo.quest);
     // TODO hourly reward
         // let hourly = (currentTime - playerInfo.hourly) > 3600 ? 0 : 3600 - (currentTime - playerInfo.hourly);
-        let junken = (currentTime - playerInfo.junken) > cooldown.work - (cooldown.junken * cooldownReduce) ? 0 : cooldown.junken - (cooldown.junken * cooldownReduce) - (currentTime - playerInfo.junken);
+        let junken = (currentTime - playerInfo.junken) > cooldown.junken - (cooldown.junken * cooldownReduce) ? 0 : cooldown.junken - (cooldown.junken * cooldownReduce) - (currentTime - playerInfo.junken);
         let fish = (currentTime - playerInfo.fish) > cooldown.fish - (cooldown.fish * cooldownReduce) ? 0 : cooldown.fish - (cooldown.fish * cooldownReduce) - (currentTime - playerInfo.fish);
         let dungeon = (currentTime - playerInfo.dungeon) > cooldown.dungeon - (cooldown.dungeon * cooldownReduce)? 0 : cooldown.dungeon - (cooldown.dungeon * cooldownReduce)- (currentTime - playerInfo.dungeon);
         let daily = (currentTime - playerInfo.daily) > cooldown.daily ? 0 : cooldown.daily - (currentTime - playerInfo.daily);
