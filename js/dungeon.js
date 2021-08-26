@@ -14,7 +14,7 @@ import errorCode from "./utils/errorCode.js";
 import { getPlayerBuffs, updateStat2 } from "./utils/processQuery.js";
 
 var greatHealUsed = 10;
-
+var keyNeeded = 1;
 async function dungeon(message, stat) {
     let player1 = message.author;
     let player2 = message.mentions.users.first();
@@ -88,23 +88,19 @@ async function dungeon(message, stat) {
             message.channel.send(`All team members must be in the same zone`);
             return
         }
-        let keyNeeded = 1;
         // CEK DUNGEON KEY
-        let cekDungeonKey1 = await queryData(`SELECT item_id FROM backpack WHERE item_id="348" AND quantity="${keyNeeded}" AND player_id="${player1.id}" LIMIT 1`);
+        let cekDungeonKey1 = await queryData(`SELECT item_id FROM backpack WHERE item_id="348" AND quantity>="${keyNeeded}" AND player_id="${player1.id}" LIMIT 1`);
         cekDungeonKey1 = cekDungeonKey1.length > 0 ? cekDungeonKey1[0] : undefined;
         if (!cekDungeonKey1) {
-            message.channel.send(`<:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon, you can acquire it through explore`);
+            message.channel.send(`<:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon, \nyou can acquire it through explore`);
             return;
         }
-        let cekDungeonKey2 = await queryData(`SELECT item_id FROM backpack WHERE item_id="348" AND quantity="${keyNeeded}" AND player_id="${player2.id}" LIMIT 1`);
+        let cekDungeonKey2 = await queryData(`SELECT item_id FROM backpack WHERE item_id="348" AND quantity>="${keyNeeded}" AND player_id="${player2.id}" LIMIT 1`);
         cekDungeonKey2 = cekDungeonKey2.length > 0 ? cekDungeonKey2[0] : undefined;
         if (!cekDungeonKey2) {
             message.channel.send(`${keyNeeded} <:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon. \nYou can acquire it through explore`);
             return;
         }
-
-        console.log(cekDungeonKey1);
-        console.log(cekDungeonKey2);
 
         let p1MaxHp = getMaxHP(playerList[0].basic_hp, playerList[0].level);
         let percentHp1 = playerList[0].hp / p1MaxHp * 100;

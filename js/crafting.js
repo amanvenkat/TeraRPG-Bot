@@ -362,7 +362,7 @@ async function crafting(message, commandBody, stat) {
                             `\n<:Iron_Bar:803907956528906241>__iron bar__ : ${materialList.ironBar[0].quantity} <:iron_ore:835768116927135744> + ${materialList.ironBar[1].quantity} <:Wood:804704694420766721>➜ <:Furnace:804145327513796688>` +
                             `\n<:Silver_Bar:803907956663910410>__silver bar__ : ${materialList.silverBar[0].quantity} <:silver_ore:835764438991765524> + ${materialList.silverBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
                             `\n<:Tungsten_Bar:803907956252344331>__tungsten bar__ : ${materialList.tungstenBar[0].quantity} <:tungsten_ore:835768117132001301> + ${materialList.tungstenBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
-                            `\n<:Gold_Bar:803907956424441856>__gold bar bar__ : ${materialList.goldBar[0].quantity} <:gold_ore:835767578621247488> + ${materialList.goldBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
+                            `\n<:Gold_Bar:803907956424441856>__gold bar__ : ${materialList.goldBar[0].quantity} <:gold_ore:835767578621247488> + ${materialList.goldBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
                             `\n<:Platinum_Bar:803907956327317524>__platinum bar__ : ${materialList.platinumBar[0].quantity} <:platinum_ore:835768116889124905> + ${materialList.platinumBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>`,
                         name: "Bars",
                         inline: false
