@@ -5,15 +5,23 @@ import emojiCharacter from "../../utils/emojiCharacter.js";
 async function marketAdd(message, args, commandBody, stat) {
     let argument = commandBody;
     let arrayPrice = argument.match(/\d+/g);
+    console.log(arrayPrice)
     let arrayName = argument.match(/[a-zA-Z]+/g);
     arrayName = arrayName.splice(2);
     if (args[0] === 'add') {
         if (stat.level < 5) { return message.channel.send(`${emojiCharacter.noEntry} | Level 5++ is required to use this command!`) };
-        if (!arrayName.length > 0) { return message.channel.send(`${emojiCharacter.noEntry} | Please provide the item name!\n${emojiCharacter.blank} usage \`tera marketplace add [item name] [price]\``) };
+            
+        if (!arrayName.length > 0 && arrayPrice.length == 1) {
+            return message.channel.send(`${emojiCharacter.noEntry} | Please provide the item name!\n${emojiCharacter.blank} usage \`tera marketplace add [item name] [price]\``) ;
+        }
         if (!arrayPrice) { return message.channel.send(`${emojiCharacter.noEntry} | Please provide the price!\n${emojiCharacter.blank} usage \`tera marketplace add [item name] [price]\``) }
         let itemName = '';
         let price = parseInt(arrayPrice[0]);
-        if(price > 10000000000) { return message.channel.send(`${emojiCharacter.noEntry} | The price cannot be greater than 10.000.000.000!`) }
+        if (arrayPrice.length > 1) {
+            price = parseInt(arrayPrice[1]);
+        }
+
+        if(price > 1000000000) { return message.channel.send(`${emojiCharacter.noEntry} | The price cannot be greater than 1.000.000.000!`) }
         if(price <= 0){ return message.channel.send(`${emojiCharacter.noEntry} | You cannot list item with zero price!`) }
         arrayName.forEach(element => {
             if (itemName) {
@@ -40,6 +48,10 @@ async function marketAdd(message, args, commandBody, stat) {
             
             message.channel.send(`**${message.author.username}** has listing ${cekItem.emoji}**${cekItem.name}** •${emojiCharacter.gold2}__${currencyFormat(price)}__ into the marketplace.`);
         } else {
+            let queryCondition = `TRIM(CONCAT(IFNULL(modifier.name,"")," ",item.name)) LIKE "${itemName}"`;
+            if (parseInt(args[1])) {
+                queryCondition = `armory2.id="${args[1]}"`;
+            }
             // Cek item if Equipment
             let armory = await queryData(`SELECT
                 armory2.id, item.emoji, armory2.item_id, armory2.modifier_id,
@@ -53,7 +65,7 @@ async function marketAdd(message, args, commandBody, stat) {
                 LEFT JOIN armor ON (armory2.item_id=armor.item_id)
                 LEFT JOIN modifier ON (armory2.modifier_id=modifier.id)
                 WHERE player_id=${message.author.id}
-                AND TRIM(CONCAT(IFNULL(modifier.name,"")," ",item.name)) LIKE "${itemName}" LIMIT 1`)
+                AND ${queryCondition} LIMIT 1`)
             armory = armory ? armory[0] : undefined;
             
             if (!armory) { return message.channel.send(`${emojiCharacter.noEntry} | You don't have this item!`) };
