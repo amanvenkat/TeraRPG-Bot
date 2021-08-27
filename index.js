@@ -109,6 +109,9 @@ import blackjack from './js/commands/mini-games/blackjack.js';
 import cook from './js/commands/cook.js';
 import botDetection from './js/utils/guard/botDetection.js';
 import release from './js/utils/guard/release.js';
+import activeBuff from './js/commands/food/buff.js';
+import recipes from './js/commands/food/recipes.js';
+import skills from './js/commands/skill/skill.js';
 // Discord
 const client = new Discord.Client();
 const ap = AutoPoster(config.DBL_TOKEN, client) // your discord.js or eris client
@@ -536,8 +539,17 @@ client.on("message", async function (message) {
                             blackjack(message, args, stat);
                         } else if (command === 'cook') {
                             log(message, commandBody);
-                            cook(message, commandBody);
-                        } 
+                            cook(message, commandBody, stat);
+                        } else if (command === 'buff') {
+                            log(message, commandBody);
+                            activeBuff(message);
+                        } else if (command === 'recipes' || command === 'recipe') {
+                            log(message, commandBody);
+                            recipes(message, commandBody);
+                        } else if (command === 'skill' || command === 'skills') {
+                            log(message, commandBody);
+                            skills(message, args[0]);
+                        }
                     }
                 } else if (command === 'start') {
                     // INSERT USER

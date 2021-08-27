@@ -3,6 +3,7 @@ var variable =
         workBenchId: '170',
         furnaceId: '171',
         anvilId: '173',
+        cookingPotId: '350',
         woodId: '179',
         copperOreId: '1',
         ironOreId: '3',
@@ -242,40 +243,47 @@ var  materialList = {
                 { id: variable.frostCore, name: 'platinum bar', quantity: 4 },
                 { id: variable.shadowScale, name: 'platinum bar', quantity: 6 }
         ],
+
+        // COOK
         cookedFish: [
-                { id: 235, name: 'bass', quantity: 1 },
-                { id: 236, name: 'atlantic cod', quantity: 1 },
-                { id: 261, name: 'trout', quantity: 2 },
+                { id: 351, emoji: ':green_book:', name: 'Cooked Fish Recipes', quantity: 1, required: true },
+                { id: 235, emoji: '<:Bass:810034071627497482> ', name: 'bass', quantity: 1, required: false},
+                { id: 236, emoji: '<:Atlantic_Cod:810126891885133825> ', name: 'atlantic cod', quantity: 1, required: false},
+                { id: 261, emoji: '<:Trout:810126889745383425>', name: 'trout', quantity: 1, required: false},
         ],
         cookedShrimp: [
-                { id: 235, name: 'shrimp', quantity: 1 },
+                { id: 352, emoji: ':blue_book:', name: 'Cooked Shrimp Recipes', quantity: 1, required: true },
+                { id: 235, emoji: '<:Shrimp:810126890190897163>', name:'shrimp', quantity: 1, required: false},
         ],
         seafoodDinner: [
-                { id: 237, name: 'Armored Cavefish', quantity: 2 },
-                { id: 239, name: 'Chaos Fish', quantity: 2 },
-                { id: 240, name: 'Crimson Tiger Fish', quantity: 2 },
-                { id: 241, name: 'Damselfish', quantity: 2 },
-                { id: 242, name: 'Double Cod    ', quantity: 2 },
-                { id: 243, name: 'Ebon Koi', quantity: 2 },
-                { id: 244, name: 'Flarefin Koi', quantity: 2 },
-                { id: 246, name: 'Frost Minnow', quantity: 2 },
-                { id: 254, name: 'Flarefin Koi', quantity: 2 },
-                { id: 249, name: 'Flarefin Koi', quantity: 2 },
-                { id: 250, name: 'Flarefin Koi', quantity: 2 },
-                { id: 251, name: 'Flarefin Koi', quantity: 2 },
-                { id: 253, name: 'Flarefin Koi', quantity: 2 },
-                { id: 254, name: 'Flarefin Koi', quantity: 2 },
-                { id: 259, name: 'Flarefin Koi', quantity: 2 },
-                { id: 260, name: 'Flarefin Koi', quantity: 2 },
-                { id: 263, name: 'Flarefin Koi', quantity: 2 },
+                { id: 354, emoji: ':orange_book:', name:'Seafood Dinner Recipes', quantity: 1, required: true },
+                { id: 237, emoji: '<:Armored_Cavefish:810126891926421551>', name:'Armored Cavefish', quantity: 2, required: false},
+                { id: 239, emoji: '<:Chaos_Fish:810126891725619201>', name:'Chaos Fish', quantity: 2, required: false},
+                { id: 240, emoji: '<:Crimson_Tigerfish:810126891724963841>', name:'Crimson Tiger Fish', quantity: 2, required: false},
+                { id: 241, emoji: '<:Damselfish:810126891570823170>', name:'Damselfish', quantity: 2, required: false},
+                { id: 242, emoji: '<:Double_Cod:810126891742789632>', name:'Double Cod', quantity: 2, required: false},
+                { id: 243, emoji: '<:Ebonkoi:810126891309596703>', name:'Ebon Koi', quantity: 2, required: false},
+                { id: 244, emoji: '<:Flarefin_Koi:810126891121246230>', name:'Flarefin Koi', quantity: 2, required: false},
+                { id: 246, emoji: '<:Frost_Minnow:810126891403051018>', name:'Frost Minnow', quantity: 2, required: false},
+                { id: 254, emoji: '<:Prismite:810126890945871882>', name:'Prismite', quantity: 2, required: false},
+                { id: 249, emoji: '<:Hemopiranha:810126890785701931>', name:'Hemopiranha', quantity: 2, required: false},
+                { id: 250, emoji: '<:Neon_Tetra:810126890903142401>', name:'Neon Tetra', quantity: 2, required: false},
+                { id: 251, emoji: '<:Obsidifish:810126891205394433>', name:'Obsidifish', quantity: 2, required: false},
+                { id: 253, emoji: '<:Princess_Fish:810126890517921813>', name:'Pricess Fish', quantity: 2, required: false},
+                { id: 254, emoji: '<:Prismite:810126890945871882>', name:'Prismite', quantity: 2, required: false},
+                { id: 259, emoji: '<:Specular_Fish:810126890148954123>', name:'Specular Fish', quantity: 2, required: false},
+                { id: 260, emoji: '<:Stinkfish:810126890123526164>', name:'Stinkifish', quantity: 2, required: false},
+                { id: 263, emoji: '<:Variegated_Lardfish:810126890051960882>', name:'Variegated Lardfish', quantity: 2, required: false},
         ],
         sashimi: [
-                { id: 245, name: 'Flarefin Koi', quantity: 2 },
-                { id: 255, name: 'Flarefin Koi', quantity: 2 },
-                { id: 262, name: 'Flarefin Koi', quantity: 2 },
+                { id: 353, emoji: ':blue_book:', name:'Sashimi Recipes', quantity: 1, required: true },
+                { id: 245, emoji: '<:Flounder:810126891465179166> ', name:'Flounder', quantity: 1, required: false},
+                { id: 255, emoji: '<:Red_Snapper:810126890765385778>', name:'Red Snapper', quantity: 1, required: false},
+                { id: 262, emoji: '<:Tuna:810126890173202442>', name:'Tuna', quantity: 1, required: false},
         ],
         lobsterTail: [
-                { id: 256, name: 'Rock Lobster', quantity: 1 },
+                { id: 355, emoji: ':blue_book:', name:'Lobster Tail Recipes', quantity: 1, required: true },
+                { id: 256, emoji: '<:Rock_Lobster:810126890455138304>', name:'Rock Lobster', quantity: 1, required: false},
         ],
         // BAR
         copperBar: [
@@ -302,6 +310,11 @@ var  materialList = {
                 { id: 8, name: 'platinum ore', quantity: 9 },     
                 { id: variable.woodId, name: 'wood', quantity: 25 },  
         ],
+
+        cookingPot: [
+                { id: variable.ironBarId, name: 'iron bar', quantity: 10 },     
+                { id: variable.woodId, name: 'wood', quantity: 15 },     
+        ]
 }
 var materialUpgradeTool= {
         ironPickaxe: [ 
@@ -368,6 +381,10 @@ var priceList = {
         healingPotion : {
                 id: '266',
                 price: 3000
+        },
+        cookedFishRecipes: {
+                id: '351',
+                price: 2400
         }
 }
 

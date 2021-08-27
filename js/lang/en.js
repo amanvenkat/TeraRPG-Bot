@@ -123,6 +123,66 @@ export default {
             name: '<:dungeon_key:877776627432554506> Dungeon Key',
             info: `Used to enter dungeon zones`,
             obtain: 'Explore',
+        },
+        cookingPot: {
+            name: '<:Cooking_Pot:837562146341519361> Cooking Pot',
+            info: `Used to cook processing`,
+            obtain: 'Crafting',
+        },
+        cookedFishRecipes: {
+            name: ':green_book: Cooked fish recipes',
+            info: `Materials used to cook <:Cooked_Fish:837562146296299581> \`cooked fish\`\n use \`recipe <recipe name>\` to see more information`,
+            obtain: 'Shop',
+        },
+        cookedShrimpRecipes: {
+            name: ':blue_book: Cooked Shrimp recipes',
+            info: `Materials used to cook <:Cooked_Shrimp:837562146493694033>  \`Cooked Shrimp\`\n use \`recipe <recipe name>\` to see more information`,
+            obtain: 'Boss drop, travel merchant',
+        },
+        shasimiRecipes: {
+            name: ':blue_book: Sashimi recipes',
+            info: `Materials used to cook <:Sashimi:850940108160630805> \`Sashimi\`\n use \`recipe <recipe name>\` to see more information`,
+            obtain: 'Boss drop, travel merchant',
+        },
+        seafoodDinnerRecipes: {
+            name: ':orange_book: Seafood Dinner recipes',
+            info: `Materials used to cook <:Seafood_Dinner:850940108340985866> \`Seafood Dinner\`\n use \`recipe <recipe name>\` to see more information`,
+            obtain: 'Boss drop, travel merchant',
+        },
+        lobsterTailRecipes: {
+            name: ':blue_book: Lobster Tail recipes',
+            info: `Materials used to cook <:Lobster_Tail:837562146833170432> \`Lobster Tail\`\n use \`recipe <recipe name>\` to see more information`,
+            obtain: 'Boss drop, travel merchant',
+        }, //cooked
+        cookedFish: {
+            name: '<:Cooked_Fish:837562146296299581> Cooked fish',
+            info: `- Consumable items, when eaten it will activate\n<:Well_Fed:854648147891191808> \`Well Fed\` Buff for 8 minutes\n\n**Note**\n<:Well_Fed:854648147891191808> \`Well Fed\` grant you +4 def`,
+            obtain: 'Shop',
+        },
+        cookedShrimp: {
+            name: '<:Cooked_Shrimp:837562146493694033> Cooked Shrimp',
+            info: `Consumable items, when eaten it will activate \n<:Plenty_Satisfied:854648147825524757> \`Plenty Satisfied\` Buff for 10 minutes\n\n**Note**\n<:Plenty_Satisfied:854648147825524757> \`Plenty Satisfied\` grant you +6 def`,
+            obtain: 'Boss drop, travel merchant',
+        },
+        shasimi: {
+            name: '<:Sashimi:850940108160630805> Sashimi',
+            info: `Consumable items, when eaten it will activate <:Plenty_Satisfied:854648147825524757> \`Plenty Satisfied\` Buff for 8 minutes\n\n**Note**\n<:Plenty_Satisfied:854648147825524757> \`Plenty Satisfied\` grant you +6 def`,
+            obtain: 'Boss drop, travel merchant',
+        },
+        seafoodDinner: {
+            name: '<:Seafood_Dinner:850940108340985866> Seafood Dinner',
+            info: `Consumable items, when eaten it will activate \n<:Exquisitely_Stuffed:854648147757105153> \`Exquisitely Stuffed\` Buff for 10 minutes\n\n**Note**\n<:Exquisitely_Stuffed:854648147757105153> \`Exquisitely Stuffed\` grant you +8 def`,
+            obtain: 'Boss drop, travel merchant',
+        },
+        lobsterTail: {
+            name: '<:Lobster_Tail:837562146833170432> Lobster Tail',
+            info: `Consumable items, when eaten it will activate \n<:Plenty_Satisfied:854648147825524757> \`Plenty Satisfied\` Buff for 4 minutes\n\n**Note**\n<:Plenty_Satisfied:854648147825524757> \`Plenty Satisfied\` grant you +6 def`,
+            obtain: 'Boss drop, travel merchant',
+        },
+        dungeon: { 
+            name: 'Dungeon',
+            info: `Used to enter a dungeon on your zone\nDungeon need a key and cannot be enter alone\nIf you success, all party members will unlock next zone\n\n**Usage**\n\`tera dungeon [@partner]\``,
+            obtain: 'none',
         }
     },
     pirates: {

@@ -17,7 +17,6 @@ function info(message, args, commandBody) {
     let name = '';
     let info = '';
     let obtain = '';
-    console.log(itemName);
     if(!args){ return message.channel.send('Correct usage \`tera info [item name]\`')}
     if (itemName === 'lucky coin') {
         name = en.info.luckyCoin.name;
@@ -100,6 +99,54 @@ function info(message, args, commandBody) {
         name = en.info.dungeonKey.name;
         info = en.info.dungeonKey.info;
         obtain = en.info.dungeonKey.obtain;
+    } else if (itemName === 'cooking pot') {
+        name = en.info.cookingPot.name;
+        info = en.info.cookingPot.info;
+        obtain = en.info.cookingPot.obtain;
+    } else if (itemName === 'cooked fish recipes' || itemName === 'cooked fish recipe') {
+        name = en.info.cookedFishRecipes.name;
+        info = en.info.cookedFishRecipes.info;
+        obtain = en.info.cookedFishRecipes.obtain;
+    } else if (itemName === 'cooked shrimp recipes' || itemName === 'cooked shrimp recipe') {
+        name = en.info.cookedShrimpRecipes.name;
+        info = en.info.cookedShrimpRecipes.info;
+        obtain = en.info.cookedShrimpRecipes.obtain;
+    } else if (itemName === 'sashimi recipes' || itemName === 'sashimi recipe') {
+        name = en.info.shasimiRecipes.name;
+        info = en.info.shasimiRecipes.info;
+        obtain = en.info.shasimiRecipes.obtain;
+    } else if (itemName === 'seafood dinner recipes' || itemName === 'seafood dinner recipe') {
+        name = en.info.seafoodDinnerRecipes.name;
+        info = en.info.seafoodDinnerRecipes.info;
+        obtain = en.info.seafoodDinnerRecipes.obtain;
+    } else if (itemName === 'lobster tail recipes' || itemName === 'lobster tail recipe') {
+        name = en.info.lobsterTailRecipes.name;
+        info = en.info.lobsterTailRecipes.info;
+        obtain = en.info.lobsterTailRecipes.obtain;
+    } else if (itemName === 'cooked fish') {
+        name = en.info.cookedFish.name;
+        info = en.info.cookedFish.info;
+        obtain = en.info.cookedFish.obtain;
+    } else if (itemName === 'cooked shrimp') {
+        name = en.info.cookedShrimp.name;
+        info = en.info.cookedShrimp.info;
+        obtain = en.info.cookedShrimp.obtain;
+    } else if (itemName === 'sashimi') {
+        name = en.info.shasimi.name;
+        info = en.info.shasimi.info;
+        obtain = en.info.shasimi.obtain;
+    } else if (itemName === 'seafood dinner') {
+        name = en.info.seafoodDinner.name;
+        info = en.info.seafoodDinner.info;
+        obtain = en.info.seafoodDinner.obtain;
+    } else if (itemName === 'lobster tail') {
+        name = en.info.lobsterTail.name;
+        info = en.info.lobsterTail.info;
+        obtain = en.info.lobsterTail.obtain;
+    } else if (itemName === 'dungeon') {
+        name = en.info.dungeon.name;
+        info = en.info.dungeon.info;
+        obtain = en.info.dungeon.obtain;
     } else {
         return message.channel.send(en.info.infoNotFound);
     }

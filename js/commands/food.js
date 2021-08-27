@@ -4,16 +4,10 @@ import queryData from '../helper/query.js';
 import errorCode from '../utils/errorCode.js';
 
 async function food(message, args1) {
-    let items = "";
     let consumables = "";
     let nextConsumables = "";
-    let nextItems = "";
-    let bait = '';
-    let nextBait = '';
-    let ore = '';
-    let nextOre = '';
-    let bar = '';
-    let nextBar = '';
+    let recipes = "";
+    let nextRecipes = "";
     let avatar = message.author.avatar;
     let id = message.author.id;
     let username = message.author.username;
@@ -34,7 +28,7 @@ async function food(message, args1) {
         FROM backpack
         LEFT JOIN item ON (backpack.item_id = item.id)
         LEFT JOIN food ON (item.id=food.item_id)
-        WHERE player_id="${id}" AND item.type_id=24`);
+        WHERE player_id="${id}" AND item.type_id IN (24,28)`);
     // Sort item by TIER
     data.sort((a, b) => {
   
@@ -54,48 +48,38 @@ async function food(message, args1) {
     });
     if (data.length > 0) {
         for (const key of data) {
-            if (key.type_id === 7) {
-                if (key.quantity > 0) {
-                    ore += `${nextOre}${key.emoji} **${key.name}**: ${key.quantity}`;
-                    nextOre = "\n"
-                }
-            } else if (key.type_id === 8) {
-                if (key.quantity > 0) {
-                    bar += `${nextBar}${key.emoji} **${key.name}**: ${key.quantity}`;
-                    nextBar = "\n"
-                }
-            } else if (key.type_id === 18 || key.type_id === 11) {
-                if (key.quantity > 0) {
-                    items += `${nextItems}${key.emoji} **${key.name}**: ${key.quantity}`;
-                    nextItems = "\n"
-                }
-            }  else if (key.item_group_id === 2 || key.item_group_id === 6) {
+            if (key.item_group_id === 2 || key.item_group_id === 6) {
                 if (key.quantity > 0) {
                     consumables += `${nextConsumables}${key.emoji} **${key.name}**: ${key.quantity}`;
                     nextConsumables = "\n"
                 }
-            } else if (key.type_id === 17) {
+            } else if (key.type_id === 28) {
                 if (key.quantity > 0) {
-                    bait += `${nextBait}${key.emoji} **${key.name}**: ${key.quantity}`;
-                    nextBait = "\n"
+                    recipes += `${nextRecipes}${key.emoji} **${key.name}**: ${key.quantity}`;
+                    nextRecipes = "\n"
                 }
             }
         }
     } else {
-        items = "Empty";
+        recipes = "Empty";
         consumables = "Empty";
     }
 
     message.channel.send(new Discord.MessageEmbed({
         "type": "rich",
         "title": null,
-        "description": 'Use \`tera eat [item] [qty]\`\nto restore some hp',
+        "description": 'Use \`tera eat [item]\`',
         "url": null,
         "color": 10115509,
         "timestamp": null,
         "fields": [ {
             "value": consumables ? consumables : 'Empty',
             "name": "__CONSUMABLES__",
+            "inline": true
+        },
+        {
+            "value": recipes ? recipes : 'Empty',
+            "name": "__RECIPES__",
             "inline": true
         }],
         thumbnail: {

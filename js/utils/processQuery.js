@@ -39,10 +39,24 @@ async function getPlayerBuffs(playerId) {
 
 }
 
+async function cekMaterialExists(playerId, materialReqList, craftQuantity ) {
+    let exist = 1;
+    let existMaterials = [];
+    for (const element of materialReqList) {
+        existMaterials = await queryData(`SELECT item_id FROM backpack WHERE player_id="${playerId}" AND (item_id=${element.id} AND quantity>=${element.quantity * craftQuantity}) LIMIT 1`);
+        if (!existMaterials.length > 0) {
+            exist = 0;
+        }
+    }
+
+    return exist;
+}
+
 export {
     updateStat2,
     equipProcedure,
     unequipProcedure,
     getPlayerBuffs,
-    insertLogs
+    insertLogs,
+    cekMaterialExists
 }

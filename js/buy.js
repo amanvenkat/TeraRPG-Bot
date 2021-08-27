@@ -48,6 +48,8 @@ function buy(message, commandsBody) {
         queryAddItem(message,message.author.id,itemName,priceList.applePie.id,priceList.applePie.price,qty)
     } else if (itemName == 'apprentice bait') {
         queryAddItem(message,message.author.id,itemName,priceList.apprenticeBait.id,priceList.apprenticeBait.price,qty)
+    } else if (itemName == 'cooked fish recipes') {
+        queryAddItem(message,message.author.id,itemName,priceList.cookedFishRecipes.id, priceList.cookedFishRecipes.price, qty)
     } else {
         message.reply('What are you trying to buy, \nCheck the item name with \`tera market\` and \`tera shop\`!');
     }

@@ -20,11 +20,12 @@ async function shop(message, stat) {
             },
             {
                 name: `Shop`,
-                value: `<:Apricot:837562146124595222> \`Apricot\` | \`restore +7 HP -----------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.apricot.price}*~~ ${priceList.apricot.price - (priceList.apricot.price * 20 / 100)}` : priceList.apricot.price}
-<:Apple:837562146497232906> \`Apple\` | \`restore +10 HP-------------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.apple.price}*~~ ${priceList.apple.price - (priceList.apple.price * 20 / 100)}` : priceList.apple.price}
-<:cookie:837564243695894528> \`Cookie\` | \`restore +30 HP------------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.cookie.price}*~~ ${priceList.cookie.price - (priceList.cookie.price * 20 / 100)}` : priceList.cookie.price}
-<:Apple_Pie:837563511135666227> \`Apple Pie\` | \`restore +100 HP--------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.applePie.price}*~~ ${priceList.applePie.price - (priceList.applePie.price * 20 / 100)}` : priceList.applePie.price}
-<:Apprentice_Bait:824271452056059985> \`Apprentice Bait\` | \`15% bait power---\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.apprenticeBait.price}*~~ ${priceList.apprenticeBait.price - (priceList.apprenticeBait.price * 20 / 100)}` : priceList.apprenticeBait.price}`,
+                value: `<:Apricot:837562146124595222> \`Apricot\` | \`restore +7 HP ---------------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.apricot.price}*~~ ${priceList.apricot.price - (priceList.apricot.price * 20 / 100)}` : priceList.apricot.price}
+<:Apple:837562146497232906> \`Apple\` | \`restore +10 HP-----------------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.apple.price}*~~ ${priceList.apple.price - (priceList.apple.price * 20 / 100)}` : priceList.apple.price}
+<:cookie:837564243695894528> \`Cookie\` | \`restore +30 HP----------------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.cookie.price}*~~ ${priceList.cookie.price - (priceList.cookie.price * 20 / 100)}` : priceList.cookie.price}
+<:Apple_Pie:837563511135666227> \`Apple Pie\` | \`restore +100 HP------------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.applePie.price}*~~ ${priceList.applePie.price - (priceList.applePie.price * 20 / 100)}` : priceList.applePie.price}
+<:Apprentice_Bait:824271452056059985> \`Apprentice Bait\` | \`15% bait power-------\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.apprenticeBait.price}*~~ ${priceList.apprenticeBait.price - (priceList.apprenticeBait.price * 20 / 100)}` : priceList.apprenticeBait.price}
+:green_book: \`Cooked Fish Recipes\` | \`common recipes---\` <:gold_coin:801440909006209025>${cekDiscountCard ? `~~*${priceList.cookedFishRecipes.price}*~~ ${priceList.cookedFishRecipes.price - (priceList.cookedFishRecipes.price * 20 / 100)}` : priceList.cookedFishRecipes.price}`,
                 
 // <:Mining_Helmet:824176323194650624> \`Mining Helmet\` | \`eliminate rock when mining--------------\` 35 <:diamond:801441006247084042>`,`
 // <:Ring:824176323219292220> \`Ring\` | \`Marrie me!!!-----------------------------------\` 175 <:diamond:801441006247084042>`,

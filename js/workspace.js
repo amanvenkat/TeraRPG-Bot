@@ -27,7 +27,8 @@ async function workspace(message, args1) {
     item3.name as workBenchName, IFNULL(item3.emoji,"") as workBenchEmoji, item3.tier as workBenchTier,
     item4.name as furnaceName, IFNULL(item4.emoji,"") as furnaceEmoji, item4.tier as furnaceTier,
     item5.name as anvilName, IFNULL(item5.emoji,"") as anvilEmoji, item5.tier as anvilTier,
-    item6.name as tinkererName, IFNULL(item6.emoji,"") as tinkererEmoji, item6.tier as tinkererTier
+    item6.name as tinkererName, IFNULL(item6.emoji,"") as tinkererEmoji, item6.tier as tinkererTier,
+    item7.name as cookingPotName, IFNULL(item7.emoji,"") as cookingPotEmoji, item7.tier as cookingPotTier
         FROM tools
             LEFT JOIN item as item1 ON (tools.item_id_pickaxe = item1.id)
             LEFT JOIN item as item2 ON (tools.item_id_axe = item2.id)
@@ -35,6 +36,7 @@ async function workspace(message, args1) {
             LEFT JOIN item as item4 ON (tools.item_id_furnace = item4.id)
             LEFT JOIN item as item5 ON (tools.item_id_anvil = item5.id)
             LEFT JOIN item as item6 ON (tools.item_id_tinkerer_workshop = item6.id)
+            LEFT JOIN item as item7 ON (tools.item_id_cooking_pot = item7.id)
         WHERE player_id="${id}"`
     let data;
     // Get Data
@@ -50,6 +52,7 @@ async function workspace(message, args1) {
                 craftingStations = key.workBenchName ? `${key.workBenchEmoji} **${key.workBenchName}** [Tier: ${key.workBenchTier}]` : '[ No Work Bench ]';
                 craftingStations += key.furnaceName ? `\n${key.furnaceEmoji} **${key.furnaceName}** [Tier: ${key.furnaceTier}]` : '\n[ No Furnace ]';
                 craftingStations += key.anvilName ? `\n${key.anvilEmoji} **${key.anvilName}** [Tier: ${key.anvilTier}]` : '\n[ No Anvil ]';
+                craftingStations += key.cookingPotName ? `\n${key.cookingPotEmoji} **${key.cookingPotName}** [Tier: ${key.cookingPotTier}]` : '\n[ No Cooking Pot ]';
                 craftingStations += key.tinkererName ? `\n${key.tinkererEmoji} **${key.tinkererName}** [Tier: ${key.tinkererTier}]` : '\n[ No Tinkerer\'s Workshop ]';
             }
         } else {

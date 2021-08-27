@@ -34,8 +34,40 @@ function secondsToDHms(second) {
     return dDisplay +  hDisplay + mDisplay + sDisplay; 
 }
 
+function getCookingSkillMaxExperience(level) {
+    level = level ? level : 1;
+    let expNextLevel = (level * 200) - 100;
+
+    return expNextLevel;
+}
+
+function getMiningSkillMaxExperience(level) {
+    level = level ? level : 1;
+    let expNextLevel = (level * 300) - 100;
+
+    return expNextLevel;
+}
+
+function getWoodCuttingSkillMaxExperience(level) {
+    level = level ? level : 1;
+    let expNextLevel = (level * 250) - 100;
+
+    return expNextLevel;
+}
+
+function getFishingSkillMaxExperience(level) {
+    level = level ? level : 1;
+    let expNextLevel = (level * 450) - 100;
+
+    return expNextLevel;
+}
+
 export {
     getTimeNow,
     secondsToDHms,
-    formatDate
+    formatDate,
+    getCookingSkillMaxExperience,
+    getMiningSkillMaxExperience,
+    getWoodCuttingSkillMaxExperience,
+    getFishingSkillMaxExperience
 }

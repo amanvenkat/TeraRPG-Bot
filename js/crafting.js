@@ -3,6 +3,7 @@ import Discord from "discord.js";
 import { variable, materialList } from "./helper/variable.js";
 import questProgress from "./utils/questProgress.js";
 import emojiCharacter from "./utils/emojiCharacter.js";
+import { cekMaterialExists } from "./utils/processQuery.js";
 
 const furnaceId = '171';
 const workbenchId = '170';
@@ -118,6 +119,27 @@ async function crafting(message, commandBody, stat) {
                 }
             } else {
                 message.reply(`:no_entry_sign: | you need <:Work_Bench:804145756918775828> **work bench** to craft this item.`)
+            }
+        }
+    } else if (itemName === 'cooking pot') {
+        let existTools = await queryData(`SELECT item_id_cooking_pot FROM tools WHERE player_id="${id}" AND item_id_cooking_pot="${variable.cookingPotId}" LIMIT 1`);
+        if (existTools.length > 0) {
+            message.reply(`you already had this item in your workspace`);
+        } else {
+            let existAnvil = await queryData(`SELECT item_id_anvil FROM tools WHERE player_id="${id}" AND item_id_anvil="${variable.anvilId}" LIMIT 1`);
+            if (existAnvil.length > 0) {
+                let existMaterials = await cekMaterialExists(message.author.id, materialList.cookingPot, 1);
+                if (existMaterials) {
+                    queryData(`UPDATE tools SET item_id_cooking_pot="350" WHERE player_id="${id}"`)
+                    for (const element of materialList.cookingPot) {
+                        queryData(`UPDATE backpack SET quantity=quantity-${element.quantity} WHERE player_id="${id}" AND item_id="${element.id}"`);
+                    }
+                    message.channel.send(`**${message.author.username}** has successfully crafted <:Cooking_Pot:837562146341519361> **${itemName}**`)
+                } else {
+                    message.reply(`${message.author}, you don't have enough materials to craft <:Cooking_Pot:837562146341519361> **${itemName}**,\ngo work and get the materials it need`)
+                }
+            } else {
+                message.reply(`:no_entry_sign: | ${message.author}, you need <:Iron_Anvil:804145327435284500> **Iron Anvil** to craft this item.`)
             }
         }
 
@@ -353,13 +375,16 @@ async function crafting(message, commandBody, stat) {
                         inline: false
                     },
                     {
-                        value: `<:Work_Bench:804145756918775828>__work bench__ : 10 <:Wood:804704694420766721> ➜ hand\n<:Furnace:804145327513796688> __furnace__ : 7 <:Wood:804704694420766721> + 15 <:copper_ore:835767578021462078> ➜ <:Work_Bench:804145756918775828>\n<:Iron_Anvil:804145327435284500>__anvil__ : 5 <:Iron_Bar:803907956528906241> ➜ <:Furnace:804145327513796688>\n`,
+                        value: `<:Work_Bench:804145756918775828>__work bench__ : 10 <:Wood:804704694420766721> ➜ hand` +
+                            `\n<:Furnace:804145327513796688> __furnace__ : 7 <:Wood:804704694420766721> + 15 <:copper_ore:835767578021462078> ➜ <:Work_Bench:804145756918775828>` +
+                            `\n<:Iron_Anvil:804145327435284500>__anvil__ : 5 <:Iron_Bar:803907956528906241> ➜ <:Furnace:804145327513796688>` +
+                            `\n<:Cooking_Pot:837562146341519361>__cooking pot__ : ${materialList.cookingPot[0].quantity} <:Iron_Bar:803907956528906241> + ${materialList.cookingPot[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>`,
                         name: "Tools",
                         inline: false
                     },
                     {
                         value: `<:Copper_Bar:803907956478836817>__copper bar__ : ${materialList.copperBar[0].quantity} <:copper_ore:835767578021462078> + ${materialList.copperBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
-                            `\n<:Iron_Bar:803907956528906241>__iron bar__ : ${materialList.ironBar[0].quantity} <:iron_ore:835768116927135744> + ${materialList.ironBar[1].quantity} <:Wood:804704694420766721>➜ <:Furnace:804145327513796688>` +
+                            `\n<:Iron_Bar:803907956528906241>__iron bar__ : ${materialList.ironBar[0].quantity} <:iron_ore:835768116927135744> + ${materialList.ironBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
                             `\n<:Silver_Bar:803907956663910410>__silver bar__ : ${materialList.silverBar[0].quantity} <:silver_ore:835764438991765524> + ${materialList.silverBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
                             `\n<:Tungsten_Bar:803907956252344331>__tungsten bar__ : ${materialList.tungstenBar[0].quantity} <:tungsten_ore:835768117132001301> + ${materialList.tungstenBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
                             `\n<:Gold_Bar:803907956424441856>__gold bar__ : ${materialList.goldBar[0].quantity} <:gold_ore:835767578621247488> + ${materialList.goldBar[1].quantity} <:Wood:804704694420766721> ➜ <:Furnace:804145327513796688>` +
@@ -399,10 +424,10 @@ async function craftBar(message,playerId,username, itemIdCrafted, materialList, 
 
     if (existWorkbench.length > 0) {            
         if (exist) {
-            if (craftQty === 'all') {
-                qty = Math.floor(existMaterials[0].quantity / materialList[0].quantity);
-                materialsReq = qty * materialList[0].quantity;
-            }
+            // if (craftQty === 'all') {
+            //     qty = Math.floor(existMaterials[0].quantity / materialList[0].quantity);
+            //     materialsReq = qty * materialList[0].quantity;
+            // }
 
             let amount = await queryData(`CALL insert_item_backpack_procedure("${playerId}", "${itemIdCrafted}", "${qty}")`);
             amount = amount.length > 0 ? amount[0][0]['@qty'] : 0;
