@@ -2,6 +2,7 @@ import Discord from 'discord.js';
 import currencyFormat from './helper/currency.js';
 import queryData from './helper/query.js';
 import setCooldowns from './helper/setCooldowns.js';
+import errorCode from './utils/errorCode.js';
 async function voteRewardsSend(client, player_id, isWeekend) {
     await queryData(`INSERT INTO votes SET player_id="${player_id}", vote_count=1, last_updates=NOW() ON DUPLICATE KEY UPDATE vote_count= vote_count + 1, last_updates=NOW()`);
     let userExist = await queryData(`SELECT level FROM stat WHERE player_id="${player_id}" LIMIT 1`);
