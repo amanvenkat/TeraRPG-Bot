@@ -20,7 +20,9 @@ async function rewards(message,command, stat) {
         let status = '';
         let potion = (Math.floor(stat.level / 2) + 2) * multiplyWeekend;
         potion = potion <= 0 ? 1 : potion;
+        potion = potion > 10 ? 10 : potion;
         let gold = (1352 * stat.level) * multiplyWeekend;
+        gold = gold > 200000 ? 200000 : gold;
         let diamond = 1 * multiplyWeekend;
         let crate = 1 * multiplyWeekend;
 
