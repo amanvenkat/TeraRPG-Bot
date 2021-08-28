@@ -4,28 +4,54 @@ import currencyFormat from './helper/currency.js';
 import queryData from './helper/query.js';
 import randomizeModifier from './helper/randomizeModifier.js';
 import errorCode from './utils/errorCode.js';
-async function reforge(message, args1, args2) {
+async function reforge(message, command, args1, args2, stat) {
+    let reforgeName = '';
+    let modifierMode = 1;
+    let maxZone = stat.max_zone.split('|');
+    maxZone = maxZone[0];
+    if (command == 'reforge') {
+        // undefined;
+        modifierMode = 1;
+        reforgeName = 'reforge';
+    } else if (command == 'enchant') {
+        if(maxZone < 4){ return message.channel.send(`${emojiCharacter.noEntry} | \`enchant\` command is unlocked in 4th zone (jungle)`)}
+        modifierMode = 2;
+        reforgeName = 'enchant';
+    } else if (command == 'refine') {
+        if(maxZone < 7){ return message.channel.send(`${emojiCharacter.noEntry} | \`refine\` command is unlocked in 7th zone (dungeon)`)}
+        modifierMode = 3;
+        reforgeName = 'refine';
+    }
+    
     if (args1 === 'weapon') {
-        processReforge(message, 1,1);
+        processReforge(message, 1, modifierMode);
     } else if (args1 === 'helmet') {
-        processReforge(message, 2,1);
+        processReforge(message, 2, modifierMode);
     } else if (args1 === 'shirt') {
-        processReforge(message, 3,1);
+        processReforge(message, 3, modifierMode);
     } else if (args1 === 'pants') {
-        processReforge(message, 4,1);
+        processReforge(message, 4, modifierMode);
     } else if (args1 === 'info' && args2 === '2') {
         message.channel.send(listEmbedArmor());
     } else if (args1 === 'info') {
         message.channel.send(listEmbedWeapon());
     } else {
-        message.channel.send(`I don't get it, make sure you type the correct equipment to reforge\ne.g. \`tera reforge weapon/helmet\``)
+        message.channel.send(`I don't get it, make sure you type the correct equipment to ${reforgeName}\ne.g. \`tera ${reforgeName} weapon/helmet\``)
     }
 }
 
-async function processReforge(message, equipmentSlot,  modifierMode) {
+async function processReforge(message, equipmentSlot,  modifierMode, reforgeName) {
     let queryCondition = '';
     let eqMsg = '';
     let field = '';
+    let costsMultiplier = 1;
+    if (modifierMode == 1) {
+        costsMultiplier = 1;
+    } else if (modifierMode == 2) {
+        costsMultiplier = 10;
+    } else if (modifierMode == 3) {
+        costsMultiplier = 100;
+    } 
     if (equipmentSlot == 1) {
         queryCondition = 'LEFT JOIN weapon ON (equipment.weapon_id=weapon.id) LEFT JOIN item ON (weapon.item_id=item.id)';
         eqMsg = 'weapon';
@@ -57,7 +83,7 @@ async function processReforge(message, equipmentSlot,  modifierMode) {
                     if (item.id == '278' || item.id == '279' || item.id == '280' || item.id == '281') {
                         return message.channel.send(`\\⛔ | **${message.author.username}**, you can't reforge **starter** equipment!`)
                     }
-                    if (item.gold > item.cost) {
+                    if (item.gold > (item.cost * costsMultiplier)) {
                         let forgeList = '';
                         if (equipmentSlot == 1) {
                             forgeList = myCache.get('forgeWeaponList');
@@ -76,7 +102,7 @@ async function processReforge(message, equipmentSlot,  modifierMode) {
                             }
                         }
                         let modifier = await randomizeModifier(forgeList, modifierMode);
-                        let nextCost = currencyFormat(modifierMode * modifier.cost);
+                        let nextCost = currencyFormat(costsMultiplier * modifier.cost);
 
                         // Update Enchant
                         queryData(`UPDATE stat SET gold=gold-${item.cost} WHERE player_id=${message.author.id} LIMIT 1`);
@@ -89,7 +115,7 @@ async function processReforge(message, equipmentSlot,  modifierMode) {
                             color: 10115509,
                             fields: [{
                                 name: `Result`,
-                                value: `${item.emoji} | ${modifier.name} ${item.name} \n========================\nnext reforge cost: <:gold_coin:801440909006209025> ${nextCost}`,
+                                value: `${item.emoji} | ${modifier.name} ${item.name} \n========================\nnext ${reforgeName} cost: <:gold_coin:801440909006209025> ${nextCost}`,
                                 inline: false,
                             }],
                             thumbnail: {
@@ -111,7 +137,7 @@ async function processReforge(message, equipmentSlot,  modifierMode) {
                         message.reply(`Check your wallet, your gold may run out elsewhere`)
                     }
                 } else {
-                    message.reply(`you don't have a ${eqMsg} to reforge!`);
+                    message.reply(`you don't have a ${eqMsg} to ${reforgeName}!`);
                 }
                 
             } else {

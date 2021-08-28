@@ -464,9 +464,9 @@ client.on("message", async function (message) {
                         } else if (command === 'booster') {
                             log(message, commandBody);
                             bonus(message);
-                        } else if (command === 'reforge') {
+                        } else if (command === 'reforge' || command === 'enchant' || command === 'refine') {
                             log(message, commandBody);
-                            reforge(message, args[0], args[1]);
+                            reforge(message,command, args[0], args[1], stat);
                         }
                         else if (command === 'armory') {
                             log(message, commandBody);

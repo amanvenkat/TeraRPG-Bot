@@ -115,17 +115,17 @@ export default async function cook(message, commandBody, stat) {
 async function isMaterialExist(playerId, itemReq, qty) {
     let existItem = undefined;
     for (let i = 0; i < itemReq.length; i++) {
-        qty = itemReq[i].quantity * qty;
+        let reqQty = itemReq[i].quantity * qty;
         if (!itemReq[i].required) {
             existItem = await queryData(`SELECT backpack.*, item.name, item.emoji
             FROM item
                 LEFT JOIN backpack ON (item.id = backpack.item_id)
-                WHERE backpack.player_id=${playerId} AND item.id = ${itemReq[i].id}
-                AND quantity >= ${qty}
+                WHERE backpack.player_id=${playerId} AND backpack.item_id = ${itemReq[i].id}
+                AND backpack.quantity >= ${reqQty}
                 LIMIT 1`);
             existItem = existItem.length > 0 ? existItem[0] : undefined;
             if (existItem) {
-                existItem.req_quantity = qty
+                existItem.req_quantity = reqQty
                 break;
             }
         }
