@@ -24,22 +24,22 @@ export default async function cook(message, commandBody, stat) {
             cookedId = variable.cookedFish
             materialReq = materialList.cookedFish
         } else if (itemName === 'cooked shrimp') {
-            minSkillLevel = 5;
+            minSkillLevel = 3;
             expGot = 1;
             cookedId = variable.cookedShrimp;
             materialReq = materialList.cookedShrimp
         } else if (itemName === 'sashimi') {
-            minSkillLevel = 5;
+            minSkillLevel = 3;
             expGot = 2;
             cookedId = variable.sashimi;
             materialReq = materialList.sashimi
         } else if (itemName === 'seafood dinner') {
-            minSkillLevel = 15;
+            minSkillLevel = 5;
             expGot = 4;
             cookedId = variable.seafoodDinner
             materialReq = materialList.seafoodDinner
         } else if (itemName === 'lobster tail') {
-            minSkillLevel = 5;
+            minSkillLevel = 3;
             expGot = 3;
             cookedId = variable.lobsterTail
             materialReq = materialList.lobsterTail

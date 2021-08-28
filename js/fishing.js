@@ -4,6 +4,7 @@ import queryData from "./helper/query.js";
 import randomizeChance from "./helper/randomize.js";
 import randomNumber from "./helper/randomNumberWithMinMax.js";
 import setCooldowns from "./helper/setCooldowns.js";
+import { insertItemBackpackProcedure } from "./utils/processQuery.js";
 
 async function fishing(message, stat) {
     let cooldowns = await isCommandsReady(message.author.id, 'fish');
@@ -29,24 +30,39 @@ async function fishing(message, stat) {
                 let baitPower = fishingPole.bait_power;
                 let catchList = await queryData(`SELECT item.id, item.emoji, item.name,item.type_id, item.chance, item.exp FROM item WHERE item_group_id=6 AND tier<=${fishingPole.tier} AND available_area_id LIKE "%${stat.zone_id}%"`);
                 for (let index = 0; index < catchList.length; index++) {
-                    let increaseChance = Math.round((parseInt(catchList[index].chance) * parseInt(baitPower)) / 100);
+                    // let increaseChance = Math.round((parseInt(catchList[index].chance) * parseInt(baitPower)));
                     if (catchList[index].chance > 0) {
-                        catchList[index].chance = parseInt(catchList[index].chance) + parseInt(increaseChance);
+                        catchList[index].chance = parseInt(catchList[index].chance) * (parseInt(baitPower) / 100);
                     }
                 }
                 queryData(`UPDATE backpack SET quantity=quantity-1 WHERE item_id="${fishingPole.bait_id}" AND player_id=${message.author.id} LIMIT 1`);
                 let itemCatch = randomizeChance(catchList);
                 if (itemCatch === 0) {
-                    let randomJunk = randomNumber(0, 2);
-                    let junk = catchList.filter(item => item.type_id === 14);
-                    let expGain = junk[randomJunk]['exp'];
+                    let plentifulCatches = [];
+                    let msg = '';
+                    if (baitPower > 50) {
+                        // NO MORE JUNK
+                        plentifulCatches = catchList.filter(item => (item.type_id === 14) && (item.id !== 219) && (item.id !== 220) && (item.id !== 221));
+                    } else {
+                        plentifulCatches = catchList.filter(item => item.type_id === 14);
+                    }
+                    
+                    let randomCatch = randomNumber(0, plentifulCatches.length - 1);
+                    let expGain = plentifulCatches[randomCatch]['exp'];
                     let totalExp = parseInt(expGain) + parseInt(fishingPole.exp);
                     if (totalExp >= expNextLevel) {
                         totalExp = parseInt(expNextLevel) - parseInt(totalExp);
                         level = fishingPole.level + 1;
                     }
+                    let itemId = plentifulCatches[randomCatch]['id'];
+                    if (itemId !== 219 && itemId !== 220 && itemId !== 221) {
+                        insertItemBackpackProcedure(message.author.id, itemId, 1);
+                        msg = `${fishingPole.emoji} | **${message.author.username}** Casts **${fishingPole.name}** and catches ${plentifulCatches[randomCatch]['emoji']} **${plentifulCatches[randomCatch]['name']}**.`;
+                    } else {
+                        msg = `${fishingPole.emoji} | **${message.author.username}** Casts **${fishingPole.name}** and catches ${plentifulCatches[randomCatch]['emoji']} **${plentifulCatches[randomCatch]['name']}**. \na piece of trash. Not really useful...`;
+                    }
                     queryData(`UPDATE fishing_pole SET exp=${totalExp}, level=${level} WHERE player_id="${message.author.id}" LIMIT 1`)
-                    message.channel.send(`${fishingPole.emoji} | **${message.author.username}** Casts **${fishingPole.name}** and catches ${junk[randomJunk]['emoji']} **${junk[randomJunk]['name']}**. \na piece of trash. Not really useful...`)
+                    message.channel.send(msg)
                 } else {
                     let expGain = itemCatch.exp;
                     let totalExp = parseInt(expGain) + parseInt(fishingPole.exp);
