@@ -52,11 +52,16 @@ async function cekMaterialExists(playerId, materialReqList, craftQuantity ) {
     return exist;
 }
 
+async function insertItemBackpackProcedure(playerId, itemId, quantity) {
+    await queryData(`CALL insert_item_backpack_procedure("${playerId}", "${itemId}", "${quantity}")`);
+}
+
 export {
     updateStat2,
     equipProcedure,
     unequipProcedure,
     getPlayerBuffs,
     insertLogs,
-    cekMaterialExists
+    cekMaterialExists,
+    insertItemBackpackProcedure
 }

@@ -7,11 +7,12 @@ import generateIcon from "./helper/emojiGenerate.js";
 import { getAttack, getDefense, getMaxHP, getMaxMP} from "./helper/getBattleStat.js";
 import isCommandsReady from "./helper/isCommandsReady.js";
 import queryData from "./helper/query.js";
+import randomizeChance from "./helper/randomize.js";
 import randomNumber from "./helper/randomNumberWithMinMax.js";
 import { activeCommand, deactiveCommand } from "./helper/setActiveCommand.js";
 import setCooldowns from "./helper/setCooldowns.js";
 import errorCode from "./utils/errorCode.js";
-import { getPlayerBuffs, updateStat2 } from "./utils/processQuery.js";
+import { getPlayerBuffs, insertItemBackpackProcedure, updateStat2 } from "./utils/processQuery.js";
 
 var greatHealUsed = 10;
 var keyNeeded = 1;
@@ -92,13 +93,13 @@ async function dungeon(message, stat) {
         let cekDungeonKey1 = await queryData(`SELECT item_id FROM backpack WHERE item_id="348" AND quantity>="${keyNeeded}" AND player_id="${player1.id}" LIMIT 1`);
         cekDungeonKey1 = cekDungeonKey1.length > 0 ? cekDungeonKey1[0] : undefined;
         if (!cekDungeonKey1) {
-            message.channel.send(`<:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon, \nyou can acquire it through explore`);
+            message.channel.send(`x${keyNeeded} <:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon, \nyou can acquire it through explore`);
             return;
         }
         let cekDungeonKey2 = await queryData(`SELECT item_id FROM backpack WHERE item_id="348" AND quantity>="${keyNeeded}" AND player_id="${player2.id}" LIMIT 1`);
         cekDungeonKey2 = cekDungeonKey2.length > 0 ? cekDungeonKey2[0] : undefined;
         if (!cekDungeonKey2) {
-            message.channel.send(`${keyNeeded} <:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon. \nYou can acquire it through explore`);
+            message.channel.send(`x${keyNeeded} <:dungeon_key:877776627432554506>**Dungeon Key** is required to do dungeon. \nYou can acquire it through explore`);
             return;
         }
 
@@ -269,6 +270,29 @@ ${generateIcon(player2Stat.hp, maxPlayer2Stat.hp, true)}  HP ${player2Stat.hp}/$
     queryData(`UPDATE backpack set quantity = quantity-${keyNeeded} WHERE player_id="${player2.id}" AND item_id="348" LIMIT 1`);
 
     if (st === 1 && bossStat.hp === 0) {
+        
+        // GENERATE REWARDS
+        let chance = randomNumber(1, 100);
+        let itemRewards = '';
+        if (chance <= bossStat.chance) {        
+            let dropsId = bossStat.boss_drop_id;
+            dropsId = dropsId.split('|');
+            let dropsItems = await queryData(`SELECT boss_drops.chance, boss_drops.max_drops, item.id, item.emoji, item.name FROM 
+                boss_drops
+                LEFT JOIN item ON (boss_drops.item_id = item.id)
+                WHERE boss_drops.id IN (${dropsId})`);
+            let dropsRewarded = randomizeChance(dropsItems, '');
+            if (dropsRewarded) {
+                let dropQty = randomNumber(1, dropsRewarded.max_drops);
+                itemRewards = `\`+${dropQty} ${dropsRewarded.name}\` ${dropsRewarded.emoji} `;
+                
+                insertItemBackpackProcedure(player1.id, dropsRewarded.id, dropQty);
+                insertItemBackpackProcedure(player2.id, dropsRewarded.id, dropQty);
+                console.log(dropsRewarded);
+            }
+        }
+        console.log(chance);
+
         let expReward = playerList[0].zone_id > 1 ? bossStat.max_exp * 100 : bossStat.min_exp * 100;
         let goldReward = playerList[0].zone_id > 1 ? bossStat.min_coin : bossStat.max_coin;
         message.channel.send(new Discord.MessageEmbed({
@@ -279,8 +303,8 @@ ${generateIcon(player2Stat.hp, maxPlayer2Stat.hp, true)}  HP ${player2Stat.hp}/$
                 value: `All party members now unlocked the next area`,
                 inline: false,
             },{
-                name: 'Rewards',
-                value: `- ${currencyFormat(goldReward)} <:gold_coin:801440909006209025>\n- ${currencyFormat(expReward)} <:exp:808837682561548288> `,
+                name: 'Rewards:',
+                value: `\`+${currencyFormat(goldReward)} \`<:gold_coin:801440909006209025>\n\`+${currencyFormat(expReward)}\` <:exp:808837682561548288> \n${itemRewards}`,
                 inline: false,
             }],
             author: {
