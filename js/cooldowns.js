@@ -30,20 +30,33 @@ async function cooldowns(message, command, args1) {
         }
     }
 
+    let explore = 0;
+    let expedition = 0;
+    let work = 0;
+    let quest = 0;
+    let junken = 0
+    let fish = 0;
+    let dungeon = 0;
+    let daily = 0;
+    let weekly = 0;
+    let vote = 0;
+    
     let currentTime = Math.round(new Date().getTime() / 1000);
+    if (playerInfo) {
 
-    let explore = (currentTime - playerInfo.explore) > cooldown.explore - (cooldown.explore * cooldownReduce) ? 0 : cooldown.explore - (cooldown.explore * cooldownReduce) - (currentTime - playerInfo.explore);
-    let expedition = (currentTime - playerInfo.expedition) > cooldown.expedition - (cooldown.expedition * cooldownReduce) ? 0 : cooldown.expedition - (cooldown.expedition * cooldownReduce) - (currentTime - playerInfo.expedition);
-    let work = (currentTime - playerInfo.work) > cooldown.work - (cooldown.work * cooldownReduce) ? 0 : cooldown.work - (cooldown.work * cooldownReduce) - (currentTime - playerInfo.work);
-    let quest = (currentTime - playerInfo.quest) > cooldown.quest - (cooldown.quest * cooldownReduce)? 0 : cooldown.quest - (cooldown.quest * cooldownReduce)- (currentTime - playerInfo.quest);
-    // TODO hourly reward
+        explore = (currentTime - playerInfo.explore) > cooldown.explore - (cooldown.explore * cooldownReduce) ? 0 : cooldown.explore - (cooldown.explore * cooldownReduce) - (currentTime - playerInfo.explore);
+        expedition = (currentTime - playerInfo.expedition) > cooldown.expedition - (cooldown.expedition * cooldownReduce) ? 0 : cooldown.expedition - (cooldown.expedition * cooldownReduce) - (currentTime - playerInfo.expedition);
+        work = (currentTime - playerInfo.work) > cooldown.work - (cooldown.work * cooldownReduce) ? 0 : cooldown.work - (cooldown.work * cooldownReduce) - (currentTime - playerInfo.work);
+        quest = (currentTime - playerInfo.quest) > cooldown.quest - (cooldown.quest * cooldownReduce) ? 0 : cooldown.quest - (cooldown.quest * cooldownReduce) - (currentTime - playerInfo.quest);
+        // TODO hourly reward
         // let hourly = (currentTime - playerInfo.hourly) > 3600 ? 0 : 3600 - (currentTime - playerInfo.hourly);
-        let junken = (currentTime - playerInfo.junken) > cooldown.junken - (cooldown.junken * cooldownReduce) ? 0 : cooldown.junken - (cooldown.junken * cooldownReduce) - (currentTime - playerInfo.junken);
-        let fish = (currentTime - playerInfo.fish) > cooldown.fish - (cooldown.fish * cooldownReduce) ? 0 : cooldown.fish - (cooldown.fish * cooldownReduce) - (currentTime - playerInfo.fish);
-        let dungeon = (currentTime - playerInfo.dungeon) > cooldown.dungeon - (cooldown.dungeon * cooldownReduce)? 0 : cooldown.dungeon - (cooldown.dungeon * cooldownReduce)- (currentTime - playerInfo.dungeon);
-        let daily = (currentTime - playerInfo.daily) > cooldown.daily ? 0 : cooldown.daily - (currentTime - playerInfo.daily);
-        let weekly = (currentTime - playerInfo.weekly) > cooldown.weekly ? 0 : cooldown.weekly - (currentTime - playerInfo.weekly);
-    let vote = (currentTime - playerInfo.vote) > cooldown.vote ? 0 : cooldown.vote - (currentTime - playerInfo.vote);
+        junken = (currentTime - playerInfo.junken) > cooldown.junken - (cooldown.junken * cooldownReduce) ? 0 : cooldown.junken - (cooldown.junken * cooldownReduce) - (currentTime - playerInfo.junken);
+        fish = (currentTime - playerInfo.fish) > cooldown.fish - (cooldown.fish * cooldownReduce) ? 0 : cooldown.fish - (cooldown.fish * cooldownReduce) - (currentTime - playerInfo.fish);
+        dungeon = (currentTime - playerInfo.dungeon) > cooldown.dungeon - (cooldown.dungeon * cooldownReduce) ? 0 : cooldown.dungeon - (cooldown.dungeon * cooldownReduce) - (currentTime - playerInfo.dungeon);
+        daily = (currentTime - playerInfo.daily) > cooldown.daily ? 0 : cooldown.daily - (currentTime - playerInfo.daily);
+        weekly = (currentTime - playerInfo.weekly) > cooldown.weekly ? 0 : cooldown.weekly - (currentTime - playerInfo.weekly);
+        vote = (currentTime - playerInfo.vote) > cooldown.vote ? 0 : cooldown.vote - (currentTime - playerInfo.vote);
+    }
     if (command === 'cd' || command === 'cooldowns') {
         message.channel.send(new Discord.MessageEmbed({
             type: "rich",
