@@ -153,7 +153,13 @@ client.on("message", async function (message) {
     }
 
     // Set prefix
-    let modifierPrefix = myCache.get(`prefix${message.guild.id}`);
+    let modifierPrefix = '';
+    try {
+        modifierPrefix = myCache.get(`prefix${message.guild.id}`);
+    } catch (error) { 
+        console.log(message.guild);
+    }
+
     if (!modifierPrefix) {
         let data = await queryData(`SELECT prefix FROM prefix WHERE guild_id=${message.guild.id} LIMIT 1`);
         if (data.length > 0) {

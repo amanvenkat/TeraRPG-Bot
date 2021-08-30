@@ -316,8 +316,8 @@ async function duel(message,stat) {
                                                     if (player1Stat.hp <= 0 && player2Stat.hp <= 0) {
                                                         combat1Title = `🪦 ${player1.username} has knocked down`;
                                                         combat1Detail = `cannot continue the battle`
-                                                        combat1Title = `🪦 ${player2.username} has knock down`;
-                                                        combat1Detail = `cannot continue the battle`
+                                                        combat2Title = `🪦 ${player2.username} has knocked down`;
+                                                        combat2Detail = `cannot continue the battle`
                                                         status1 = '🪦 '
                                                         status2 = '🪦 '
                                                         pointsWin = (player1Stat.level - player2Stat.level) > 5 ? 27 : (player1Stat.level - player2Stat.level) < -5 ? 19 : 25;
