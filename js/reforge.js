@@ -3,54 +3,68 @@ import myCache from './cache/leaderboardChace.js';
 import currencyFormat from './helper/currency.js';
 import queryData from './helper/query.js';
 import randomizeModifier from './helper/randomizeModifier.js';
+import { priceList } from './helper/variable.js';
+import emojiCharacter from './utils/emojiCharacter.js';
 import errorCode from './utils/errorCode.js';
-async function reforge(message, command, args1, args2, stat) {
+import parseItemName from './utils/parseItemName.js';
+async function reforge(message, command, commandBody, args1, args2, stat) {
     let reforgeName = '';
     let modifierMode = 1;
     let maxZone = stat.max_zone.split('|');
-    maxZone = maxZone[0];
+    maxZone = maxZone[0]; 
+    let { itemName } = parseItemName(commandBody);
+    let isUseBB = itemName.includes('bb'); 
     if (command == 'reforge') {
         // undefined;
         modifierMode = 1;
         reforgeName = 'reforge';
-    } else if (command == 'enchant') {
-        if(maxZone < 4){ return message.channel.send(`${emojiCharacter.noEntry} | \`enchant\` command is unlocked in 4th zone (jungle)`)}
+    } else if (command == 'sreforge') {
+        if (maxZone < 4) { return message.channel.send(`${emojiCharacter.noEntry} | \`sreforge\` command is unlocked in 4th zone (jungle)`) } 
         modifierMode = 2;
-        reforgeName = 'enchant';
-    } else if (command == 'refine') {
-        if(maxZone < 7){ return message.channel.send(`${emojiCharacter.noEntry} | \`refine\` command is unlocked in 7th zone (dungeon)`)}
+        reforgeName = 'sreforge';
+    } else if (command == 'ureforge') {
+        if (maxZone < 7) { return message.channel.send(`${emojiCharacter.noEntry} | \`ureforge\` command is unlocked in 7th zone (dungeon)`) } 
         modifierMode = 3;
-        reforgeName = 'refine';
+        reforgeName = 'ureforge';
     }
     
     if (args1 === 'weapon') {
-        processReforge(message, 1, modifierMode);
+        processReforge(message, 1, modifierMode,reforgeName, isUseBB);
     } else if (args1 === 'helmet') {
-        processReforge(message, 2, modifierMode);
+        processReforge(message, 2, modifierMode, reforgeName, isUseBB);
     } else if (args1 === 'shirt') {
-        processReforge(message, 3, modifierMode);
+        processReforge(message, 3, modifierMode, reforgeName, isUseBB);
     } else if (args1 === 'pants') {
-        processReforge(message, 4, modifierMode);
-    } else if (args1 === 'info' && args2 === '2') {
+        processReforge(message, 4, modifierMode, reforgeName, isUseBB);
+    } else if (itemName.includes('info') && args2 === '2') {
         message.channel.send(listEmbedArmor());
-    } else if (args1 === 'info') {
+    } else if (itemName.includes('info')) {
         message.channel.send(listEmbedWeapon());
     } else {
         message.channel.send(`I don't get it, make sure you type the correct equipment to ${reforgeName}\ne.g. \`tera ${reforgeName} weapon/helmet\``)
     }
 }
 
-async function processReforge(message, equipmentSlot,  modifierMode, reforgeName) {
+async function processReforge(message, equipmentSlot,  modifierMode, reforgeName, isUseBB) {
     let queryCondition = '';
     let eqMsg = '';
     let field = '';
     let costsMultiplier = 1;
+    // cek blacksmithBlessing
+    
+    if (isUseBB) {
+        if (modifierMode == 1) { return message.channel.send(`\\⛔ | **${message.author.username}**, <:crystal_shard:882124050791559200>**blacksmith blessing** only useable on \`sreforge\` or \`ureforge\`!`) }
+
+        let cekBB = await queryData(`SELECT * FROM backpack WHERE player_id=${message.author.id} AND item_id=${priceList.blacksmithBlessing.id} AND quantity>0 LIMIT 1`);
+        cekBB = cekBB.length > 0 ? cekBB[0] : undefined;
+        if(!cekBB) { return message.channel.send(`\\⛔ | **${message.author.username}**, you don't have any <:crystal_shard:882124050791559200>**blacksmith blessing** to use!`)}
+    }
     if (modifierMode == 1) {
         costsMultiplier = 1;
     } else if (modifierMode == 2) {
-        costsMultiplier = 10;
+        costsMultiplier = 25;
     } else if (modifierMode == 3) {
-        costsMultiplier = 100;
+        costsMultiplier = 250;
     } 
     if (equipmentSlot == 1) {
         queryCondition = 'LEFT JOIN weapon ON (equipment.weapon_id=weapon.id) LEFT JOIN item ON (weapon.item_id=item.id)';
@@ -71,7 +85,7 @@ async function processReforge(message, equipmentSlot,  modifierMode, reforgeName
     }
 
     if (equipmentSlot > 0) {
-        let item = await queryData(`SELECT stat.level, item.id, item.emoji, item.name, gold, IFNULL(cost,500) as cost FROM stat
+        let item = await queryData(`SELECT stat.level, item.id, item.emoji, item.name, gold, IFNULL(cost,500) as cost, modifier.id as modifierId,modifier.name as modifierName FROM stat
                                 LEFT JOIN equipment ON (stat.player_id=equipment.player_id)
                                 ${queryCondition}
                                 LEFT JOIN modifier ON (equipment.${field}=modifier.id)
@@ -81,7 +95,7 @@ async function processReforge(message, equipmentSlot,  modifierMode, reforgeName
             if (item.level >= 5) {
                 if (item.name) {
                     if (item.id == '278' || item.id == '279' || item.id == '280' || item.id == '281') {
-                        return message.channel.send(`\\⛔ | **${message.author.username}**, you can't reforge **starter** equipment!`)
+                        return message.channel.send(`\\⛔ | **${message.author.username}**, you can't ${reforgeName} **starter** equipment!`)
                     }
                     if (item.gold > (item.cost * costsMultiplier)) {
                         let forgeList = '';
@@ -101,11 +115,22 @@ async function processReforge(message, equipmentSlot,  modifierMode, reforgeName
                                 forgeList = myCache.get('forgeArmorList');
                             }
                         }
-                        let modifier = await randomizeModifier(forgeList, modifierMode);
+
+                        let modifier = await randomizeModifier(forgeList, modifierMode); 
+                        if (isUseBB) {
+                            if (modifier.id < item.modifierId) {
+                                modifier.id = item.modifierId;
+                                modifier.name = item.modifierName;
+                                modifier.cost = item.cost;
+                                // reduce bb from backpack
+                                queryData(`UPDATE backpack SET quantity = quantity - 1 WHERE player_id=${message.author.id} AND item_id = ${priceList.blacksmithBlessing.id} LIMIT 1`);
+                            }
+                        }
+
                         let nextCost = currencyFormat(costsMultiplier * modifier.cost);
 
                         // Update Enchant
-                        queryData(`UPDATE stat SET gold=gold-${item.cost} WHERE player_id=${message.author.id} LIMIT 1`);
+                        queryData(`UPDATE stat SET gold=gold-${item.cost * costsMultiplier} WHERE player_id=${message.author.id} LIMIT 1`);
                         queryData(`UPDATE equipment SET ${field}="${modifier.id}" WHERE player_id="${message.author.id}" LIMIT 1`);
             
                         message.channel.send(new Discord.MessageEmbed({
@@ -125,7 +150,7 @@ async function processReforge(message, equipmentSlot,  modifierMode, reforgeName
                                 width: 0
                             },
                             author: {
-                                "name": `${message.author.username}'s Reforge`,
+                                "name": `${message.author.username}'s ${reforgeName}`,
                                 "url": null,
                                 "iconURL": `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=512`,
                                 "proxyIconURL": `https://images-ext-1.discordapp.net/external/ZU6e2R1XAieBZJvWrjd-Yj2ARoyDwegTLHrpzT3i5Gg/%3Fsize%3D512/https/cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
@@ -141,7 +166,7 @@ async function processReforge(message, equipmentSlot,  modifierMode, reforgeName
                 }
                 
             } else {
-                message.reply('your hand is not strong enough,\n you must be level 5 and above to reforge equipment!')
+                message.reply(`your hand is not strong enough,\n you must be level 5 and above to ${reforgeName} equipment!`)
             }
         }
     }
@@ -174,7 +199,12 @@ function listEmbedWeapon() {
                 inline: true
             },
             {
-                value: `use \`tera reforge weapon\`\narmor reforge info use \`reforge info 2\`\nyou must at least level 5 to reforge equipment`,
+                name: 'Higher Tiers',
+                value: `
+sreforge: unlocked in 4th zone (jungle), has better chances but x25 price
+ureforge: unlocked in 7th zone (dungeon), has better chances but x250 price`},
+            {
+                value: `use \`tera reforge weapon\`\nFor armor reforge info use \`reforge info 2\`\nyou must at least level 5 to reforge an equipment`,
                 name: 'Info'
             }
         ],
@@ -196,11 +226,11 @@ function listEmbedArmor() {
                         \`Guarding----------[ +2 ]-----------[  3.000 ]\`
                         \`Armored-----------[ +4 ]-----------[ 15.000 ]\`
                         \`Warding-----------[ +8 ]-----------[ 35.000 ]\`
-                        \`Defender----------[+16 ]-----------[ 70.000 ]\``,
+                        \`Defender----------[+10 ]-----------[ 70.000 ]\``,
                 inline: false,
             }, 
             {
-                value: `use \`tera reforge helmet/shirt/pants\`\nweapon reforge info use \`reforge info 1\`\nyou must at least level 5 to reforge equipment`,
+                value: `use \`tera reforge helmet/shirt/pants\`\nFor weapon reforge info use \`reforge info 1\`\nyou must at least level 5 to reforge an equipment`,
                 name: 'Info'
             }
         ],

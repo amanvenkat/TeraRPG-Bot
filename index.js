@@ -470,9 +470,9 @@ client.on("message", async function (message) {
                         } else if (command === 'booster') {
                             log(message, commandBody);
                             bonus(message);
-                        } else if (command === 'reforge' || command === 'enchant' || command === 'refine') {
+                        } else if (command === 'reforge' || command === 'sreforge' || command === 'ureforge') {
                             log(message, commandBody);
-                            reforge(message,command, args[0], args[1], stat);
+                            reforge(message, command, commandBody, args[0], args[1], stat);
                         }
                         else if (command === 'armory') {
                             log(message, commandBody);
