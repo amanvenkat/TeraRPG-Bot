@@ -8,7 +8,7 @@ export default async function cook(message, commandBody, stat) {
     try {
         // CEK player max area unlocked
         if (stat.max_zone[0] < 3) {
-            return message.channel.send(`${emojiCharacter.noEntry} | <@${message.author.id}>, \`\`cook\`\` command can only be accessed if you have reached zone 3`);
+            return message.channel.send(`${emojiCharacter.noEntry} | <@${message.author.id}>, \`\`cook\`\` command can only be accessed if you have reached 3rd zone`);
         }
 
         let { itemName, itemQuantity } = parseItemName(commandBody);

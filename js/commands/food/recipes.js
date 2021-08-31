@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 import queryData from '../../helper/query.js';
 import { materialList } from '../../helper/variable.js';
+import emojiCharacter from '../../utils/emojiCharacter.js';
 import errorCode from '../../utils/errorCode.js';
 import parseItemName from '../../utils/parseItemName.js';
 
@@ -91,7 +92,9 @@ export default async function recipes(message, commandBody) {
     } else if (itemName === 'sashimi' || itemName === 'sashimi recipes') {
         materialsReq = materialList.sashimi;
         tools = '<:Work_Bench:804145756918775828> Work bench';
-    } 
+    } else {
+        return message.channel.send(`${emojiCharacter.noEntry} | Invalid recipes name!`);
+    }
 
     for (const element of materialsReq) {
         if (!element.required) {

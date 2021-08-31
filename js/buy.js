@@ -29,12 +29,14 @@ function buy(message, commandsBody) {
         queryCheckExistItem(message, message.author.id, 3)
     } else if (itemName == 'pylon') {
         queryCheckExistItem(message, message.author.id, 5)
-    }
-    // else if (args1 === 'ring') {
-    //     queryCheckExistItem(message, message.author.id, 4)
-    // }
-    // SHOP ITEM
-    else if (itemName == 'healing potion') {
+    } else if (itemName == 'blacksmith blessing' || itemName == 'bb') {
+        itemName = 'blacksmith blessing';
+        queryAddItem(message, message.author.id, itemName, priceList.blacksmithBlessing.id, priceList.blacksmithBlessing.price, qty, priceList.blacksmithBlessing.type)
+        // else if (args1 === 'ring') {
+        //     queryCheckExistItem(message, message.author.id, 4)
+        // }
+        // SHOP ITEM
+    } else if (itemName == 'healing potion') {
         // queryAddItem(message,message.author.id,itemName,priceList.healingPotion.id,priceList.healingPotion.price,qty)
         message.channel.send('This item is currently out of stock');
     }
@@ -102,11 +104,19 @@ async function queryCheckExistItem(message, playerId, toBuyId){
 }
 
 
-async function queryAddItem(message, playerId, itemName, itemId, price, amount) {
+async function queryAddItem(message, playerId, itemName, itemId, price, amount, currencyType) {
     let discountCard = await queryData(`SELECT * FROM backpack WHERE player_id=${message.author.id} AND item_id=${limitedTimeUse.dicountCardId} AND quantity>0 LIMIT 1`);
     discountCard = discountCard.length > 0 ? 20 : 0;
-    let gold = await queryData(`SELECT gold FROM stat WHERE player_id="${playerId}" LIMIT 1`);
-    gold = gold.length > 0 ? gold[0].gold : 0;
+    let currencyEmoji = `<:gold_coin:801440909006209025>`;
+    let currencyName = 'gold';
+    if (currencyType == 2) {
+        discountCard = 0;
+        currencyName = 'diamond';
+        currencyEmoji = `<:diamond:801441006247084042>`;
+
+    }
+    let currency = await queryData(`SELECT ${currencyName} FROM stat WHERE player_id="${playerId}" LIMIT 1`);
+    currency = currency.length > 0 ? currency[0][currencyName] : 0;
     amount = isNaN(amount) || amount == '0' ? 1 : parseInt(amount);
     if (amount > 0) {
         let discPrice = discountCard ? price - (price * 20 / 100) : price;
@@ -128,7 +138,7 @@ async function queryAddItem(message, playerId, itemName, itemId, price, amount) 
                             if (message.content.toLowerCase() == 'yes' || message.content.toLowerCase() == 'y') {
                                 msgDiscountCard = `${limitedTimeUse.dicountCardEmoji}Discount card applied __*20%*__\n`
                                 price = discPrice;
-                                if (gold >= price) {
+                                if (currency >= price) {
                                     queryData(`UPDATE backpack SET quantity=quantity-1 WHERE player_id="${playerId}" AND item_id=${limitedTimeUse.dicountCardId} LIMIT 1`);
                                 }
                             } else if (message.content.toLowerCase() == 'no' || message.content.toLowerCase() == 'n') {
@@ -139,12 +149,12 @@ async function queryAddItem(message, playerId, itemName, itemId, price, amount) 
                             }
 
                             
-                            if (gold >= price) {
+                            if (currency >= price) {
                                 queryData(`CALL insert_item_backpack_procedure("${playerId}", "${itemId}", ${amount})`);
-                                queryData(`UPDATE stat SET gold=gold-${price} WHERE player_id="${playerId}" LIMIT 1`);
-                                message.channel.send(`${msgDiscountCard}**${message.author.username}** successfully bought **x${amount} ${itemName}** for <:gold_coin:801440909006209025>${currencyFormat(price)}`);
+                                queryData(`UPDATE stat SET ${currencyName}=${currencyName}-${price} WHERE player_id="${playerId}" LIMIT 1`);
+                                message.channel.send(`${msgDiscountCard}**${message.author.username}** successfully bought **x${amount} ${itemName}** for ${currencyEmoji}${currencyFormat(price)}`);
                             } else {
-                                message.reply('you don\'t have enough **gold** to buy this item');
+                                message.reply(`you don\'t have enough **${currencyName}** to buy this item`);
                             }
                             deactiveCommand(message.author.id)
                         })
@@ -154,12 +164,12 @@ async function queryAddItem(message, playerId, itemName, itemId, price, amount) 
                         });
                 });
         } else {
-            if (gold >= price) {
+            if (currency >= price) {
                 queryData(`CALL insert_item_backpack_procedure("${playerId}", "${itemId}", ${amount})`);
-                queryData(`UPDATE stat SET gold=gold-${price} WHERE player_id="${playerId}" LIMIT 1`);
-                message.channel.send(`${msgDiscountCard}**${message.author.username}** successfully bought **x${amount} ${itemName}** for <:gold_coin:801440909006209025>${currencyFormat(price)}`);
+                queryData(`UPDATE stat SET ${currencyName}=${currencyName}-${price} WHERE player_id="${playerId}" LIMIT 1`);
+                message.channel.send(`${msgDiscountCard}**${message.author.username}** successfully bought **x${amount} ${itemName}** for ${currencyEmoji}${currencyFormat(price)}`);
             } else {
-                message.reply('you don\'t have enough **gold** to buy this item');
+                message.reply( `you don\'t have enough **${currencyName}** to buy this item`);
             }
         }
 

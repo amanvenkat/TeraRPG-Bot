@@ -385,6 +385,11 @@ var priceList = {
         cookedFishRecipes: {
                 id: '351',
                 price: 2400
+        },
+        blacksmithBlessing: {
+                id: '356',
+                price: 2,
+                type: 2,
         }
 }
 

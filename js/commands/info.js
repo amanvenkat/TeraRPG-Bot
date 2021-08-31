@@ -147,6 +147,14 @@ function info(message, args, commandBody) {
         name = en.info.dungeon.name;
         info = en.info.dungeon.info;
         obtain = en.info.dungeon.obtain;
+    } else if (itemName === 'blacksmith blessing' || itemName === 'bb') {
+        name = en.info.blacksmithBlessing.name;
+        info = en.info.blacksmithBlessing.info;
+        obtain = en.info.blacksmithBlessing.obtain;
+    }  else if (itemName === 'cook') {
+        name = en.info.cook.name;
+        info = en.info.cook.info;
+        obtain = en.info.cook.obtain;
     } else {
         return message.channel.send(en.info.infoNotFound);
     }

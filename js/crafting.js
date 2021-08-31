@@ -433,7 +433,7 @@ async function craftBar(message,playerId,username, itemIdCrafted, materialList, 
             amount = amount.length > 0 ? amount[0][0]['@qty'] : 0;
 
             for (const element of materialList) {
-                queryData(`UPDATE backpack SET quantity=quantity-${element.quantity} WHERE player_id="${playerId}" AND item_id="${element.id}"`)
+                queryData(`UPDATE backpack SET quantity=quantity-${element.quantity * qty} WHERE player_id="${playerId}" AND item_id="${element.id}"`)
             }
             
             message.channel.send(`<:Furnace:804145327513796688> | **${username}** has successfully crafted x${qty} ${emoji} **${args1} ${args2}**, \nYou now have x${amount} ${emoji} **${args1} ${args2}** in your backpack\nuse\`smelt\` to smelting item bar`)

@@ -183,6 +183,16 @@ export default {
             name: 'Dungeon',
             info: `Used to enter a dungeon on your zone\nDungeon need a key and cannot be enter alone\nIf you success, all party members will unlock next zone\n\n**Usage**\n\`tera dungeon [@partner]\``,
             obtain: 'none',
+        },
+        blacksmithBlessing: { 
+            name: '<:crystal_shard:882124050791559200> Blacksmith Blessing',
+            info: `Prevent the equipment from being drop the enchanment level. \n\n**Usage**\`\ntera sreforge/ureforge [equipment] bb\``,
+            obtain: 'market',
+        },
+        cook: { 
+            name: 'Cook',
+            info: `Used to cook fish into buff items`,
+            obtain: '3th zone',
         }
     },
     pirates: {
